@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hicham Hebaz | Marketing strategist & social media designer</title>
+  <meta name="description" content="Marketing strategist and social media designer in Rabat. Campaigns, posts and ads in Darija, French and English that people stop for.">
+  <meta name="theme-color" content="#fdc82f">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..900&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&family=Noto+Sans+Tifinagh&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="assets/img/mascot-cutout.webp" fetchpriority="high">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/scenery.css">
+  <link rel="stylesheet" href="css/hero.css">
+  <link rel="stylesheet" href="css/chapters.css">
+  <link rel="stylesheet" href="css/work.css">
+  <link rel="stylesheet" href="css/seams.css">
+  <link rel="stylesheet" href="css/notes.css">
+  <link rel="stylesheet" href="css/ambient.css">
+  <script type="importmap">
+    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.min.js" } }
+  </script>
+</head>
+<body class="is-loading">
+  <svg class="sr-only" aria-hidden="true">
+    <defs>
+      <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .6 0"/></filter>
+      <!-- wash grades: luminance mapped onto each scene's tritone (ink -> wash -> cream) -->
+      <filter id="dt-amber" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="table" tableValues=".114 .992 .996"/><feFuncG type="table" tableValues=".078 .71 .996"/><feFuncB type="table" tableValues=".173 .169 .796"/></feComponentTransfer></filter>
+      <filter id="dt-magenta" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="table" tableValues=".173 .914 1"/><feFuncG type="table" tableValues=".027 .318 .945"/><feFuncB type="table" tableValues=".176 .773 .788"/></feComponentTransfer></filter>
+      <filter id="dt-jungle" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="table" tableValues=".031 .298 .992"/><feFuncG type="table" tableValues=".063 .808 .992"/><feFuncB type="table" tableValues=".043 .243 .71"/></feComponentTransfer></filter>
+      <filter id="dt-road" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="table" tableValues=".047 .11 .961"/><feFuncG type="table" tableValues=".165 .663 .882"/><feFuncB type="table" tableValues=".369 .894 .69"/></feComponentTransfer></filter>
+      <filter id="dt-alarm" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="table" tableValues=".031 .843 .937"/><feFuncG type="table" tableValues=".063 .106 .694"/><feFuncB type="table" tableValues=".043 .098 .69"/></feComponentTransfer></filter>
+      <filter id="dt-indigo" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="table" tableValues=".027 .18 .961"/><feFuncG type="table" tableValues=".004 .18 .882"/><feFuncB type="table" tableValues=".125 .482 .69"/></feComponentTransfer></filter>
+      <filter id="dt-eclipse" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="table" tableValues=".039 .275 .996"/><feFuncG type="table" tableValues=".016 .341 .996"/><feFuncB type="table" tableValues=".153 .69 .796"/></feComponentTransfer></filter>
+      <!-- living ink: each seam bank carries its own boil filter (js/seam-art.js) -->
+      <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="22"/></filter>
+    </defs>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></symbol>
+  </svg>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+  <!-- corner chrome: chapter counter, like the carousel's slide count -->
+  <div class="hud" id="hud" aria-hidden="true">
+    <span class="hud__win"><span class="hud__no">01</span></span><span class="hud__total">/ 08</span>
+    <span class="hud__dot"></span>
+    <span class="hud__win hud__win--name"><span class="hud__name">The hook</span></span>
+  </div>
+
+  <!-- cold open -->
+  <div class="intro" id="intro" aria-hidden="true">
+    <div class="intro__bar intro__bar--top"></div>
+    <div class="intro__bar intro__bar--bottom"></div>
+    <p class="intro__line" data-line="1">Every brand has a story.</p>
+    <p class="intro__line" data-line="2">Most of them never get told.</p>
+    <button class="intro__skip" id="intro-skip" type="button">Skip</button>
+  </div>
+
+  <div class="cursor" id="cursor" aria-hidden="true"><span id="cursor-label"></span></div>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav" id="nav">
+    <a class="nav__logo" href="#top"><span class="tifi" aria-hidden="true">ⵣ</span><span data-profile="name">Hicham Hebaz</span></a>
+    <nav aria-label="Main navigation">
+      <ul class="nav__links" id="nav-links">
+        <li><a href="#proof">The work</a></li>
+        <li><a href="#method">Method</a></li>
+        <li><a href="#writing">Writing</a></li>
+        <li><a href="#offer">Services</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li class="nav__cta-mobile"><a href="#cta">Start a project</a></li>
+      </ul>
+    </nav>
+    <div class="nav__right">
+      <span class="status"><i></i>Booking new projects</span>
+      <a class="btn btn--line btn--sm" href="#cta" data-nod>Start a project</a>
+      <button class="nav__burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links"><span></span><span></span></button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- CH 01: THE HOOK -->
+    <section class="hero" id="top" data-grade="amber" data-chapter="01|The hook" aria-labelledby="hero-title">
+      <div class="hero__stage">
+        <div class="hero__canvas" id="hero-canvas">
+          <img class="hero__fallback" src="assets/img/mascot-cutout.webp" width="744" height="1296" alt="">
+        </div>
+        <div class="letterbox letterbox--top" aria-hidden="true"></div>
+        <p class="slate hero__slate"><span>Ch. 01</span> The hook</p>
+
+        <!-- the quote is set around the figure: left line, giant word in the sky behind him, right line -->
+        <h1 class="hero__title" id="hero-title">
+          <span class="hero__line hero__line--a"><span class="line"><span>Brands post.</span></span></span>
+          <span class="hero__word"><em>Stories</em></span>
+          <span class="hero__line hero__line--b"><span class="line"><span>get remembered.</span></span></span>
+        </h1>
+
+        <div class="hero__subs">
+          <p class="hero__sub" data-sub="0">I'm <strong data-profile="name">Hicham Hebaz</strong>, a marketing strategist and designer from Rabat.</p>
+          <p class="hero__sub" data-sub="1">I turn what you sell into campaigns people stop for,</p>
+          <p class="hero__sub" data-sub="2">in the language your customers speak: <em>Darija, French or English.</em></p>
+        </div>
+        <div class="hero__ctas">
+          <a class="btn btn--solid" href="#cta" data-nod>Start your campaign <svg><use href="#i-arrow"/></svg></a>
+          <a class="btn btn--ghost" href="#proof" data-cursor="Watch"><svg><use href="#i-play"/></svg>Watch the reel</a>
+        </div>
+
+        <div class="letterbox letterbox--bottom">
+          <ul class="credits-row">
+            <li><b>7</b> brands &amp; campaigns</li>
+            <li><b>MADICE</b> master's in strategic marketing</li>
+            <li><b>3</b> languages</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- CREDITS (social proof) -->
+    <section class="reel-credits" aria-label="Brands in the reel">
+      <p class="reel-credits__label">In the reel</p>
+      <div class="reel-credits__track" id="credits"></div>
+    </section>
+
+    <div class="seam" data-seam="rise" aria-hidden="true"></div>
+
+    <!-- CH 02: THE NOISE -->
+    <section class="noise" id="noise" data-grade="jungle" data-chapter="02|The noise" aria-labelledby="noise-title">
+      <div class="noise__pin">
+        <div class="noise__sun" aria-hidden="true"></div>
+        <div class="noise__feed" id="noise-feed" aria-hidden="true"></div>
+        <div class="noise__copy">
+          <p class="slate"><span>Ch. 02</span> The noise</p>
+          <h2 class="sr-only" id="noise-title">The problem with most brand content</h2>
+          <p class="narration" data-n="0">Your customers scroll past a wall of posts every day.</p>
+          <p class="narration" data-n="1">Most of it looks the same. Says the same thing.</p>
+          <p class="narration" data-n="2">So they keep scrolling.</p>
+          <p class="narration narration--turn" data-n="3">Until something sounds like <em>them.</em></p>
+        </div>
+      </div>
+    </section>
+
+    <div class="seam" data-seam="storm" aria-hidden="true"></div>
+
+    <!-- CH 03: THE PROOF -->
+    <section class="proof" id="proof" data-grade="road" data-chapter="03|The proof" aria-labelledby="proof-title">
+      <div class="proof__pin">
+        <div class="amb amb--road" data-amb="roadSun" aria-hidden="true"></div>
+        <header class="chapter-head">
+          <p class="slate"><span>Ch. 03</span> The proof</p>
+          <h2 class="h-display" id="proof-title" data-accent="One" data-split>Seven brands. One way of telling it.</h2>
+          <!-- film-leader counter: the dial sweeps with the reel, the frame number rolls per project -->
+          <div class="proof__meter" aria-hidden="true">
+            <div class="proof__progress"><i id="work-progress"></i></div>
+            <span class="leader">
+              <svg viewBox="-20 -20 40 40"><circle class="leader__ring" r="17"/><path class="leader__cross" d="M-17 0H17M0 -17V17"/><circle class="leader__sweep" r="8.5" pathLength="1"/></svg>
+              <span class="leader__win"><b id="work-count">01</b></span><small id="work-total">/ 07</small>
+            </span>
+          </div>
+        </header>
+        <ul class="reel" id="work-track"></ul>
+      </div>
+    </section>
+
+    <div class="seam" data-seam="reel" aria-hidden="true"></div>
+
+    <article class="case" data-chapter="03|The proof" data-grade="magenta" aria-labelledby="case-taf">
+      <div class="amb amb--dusk" data-amb="duskSun" aria-hidden="true"></div>
+      <div class="case__media">
+        <div class="carousel" data-carousel aria-roledescription="carousel" aria-label="Tafilalt posts">
+          <div class="carousel__track" id="taf-track" tabindex="0"></div>
+          <div class="carousel__ui">
+            <button class="carousel__btn" data-prev aria-label="Previous post"><svg style="transform:scaleX(-1)"><use href="#i-arrow"/></svg></button>
+            <div class="carousel__bar"><i data-bar></i></div>
+            <button class="carousel__btn" data-next aria-label="Next post"><svg><use href="#i-arrow"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div class="case__story" data-case="tafilalt">
+        <p class="slate"><span>Scene 1</span> Tourism · Tafilalt</p>
+        <h3 class="h-display" id="case-taf" data-accent="nine" data-split>A region, told in nine frames.</h3>
+      </div>
+    </article>
+
+    <div class="seam" data-seam="supper" aria-hidden="true"></div>
+
+    <article class="case case--flip" data-chapter="03|The proof" data-grade="jungle" aria-labelledby="case-okla">
+      <div class="amb amb--steam" data-amb="greenSun" aria-hidden="true"></div>
+      <div class="case__media"><div class="deck" id="okla-deck" aria-label="Okla Bio posts. Drag the top card or use arrow keys."></div></div>
+      <div class="case__story" data-case="okla">
+        <p class="slate"><span>Scene 2</span> Food · Okla Bio</p>
+        <h3 class="h-display" id="case-okla" data-accent="established" data-split>A new restaurant that looked established on day one.</h3>
+      </div>
+    </article>
+
+    <article class="case" data-chapter="03|The proof" data-grade="alarm" aria-labelledby="case-wa3i">
+      <div class="amb amb--questions" data-amb="alarmSky" aria-hidden="true"></div>
+      <div class="case__media"><div class="fan" id="wa3i-fan"></div></div>
+      <div class="case__story" data-case="wa3i">
+        <p class="slate"><span>Scene 3</span> Awareness · Wa3i Media</p>
+        <h3 class="h-display" id="case-wa3i" data-accent="arguing." data-split>Questions that do the arguing.</h3>
+      </div>
+    </article>
+
+    <!-- hard cut out of alarm red: a caravan in magenta dust -->
+    <div class="caravan-band" data-grade="magenta" data-el="caravan" aria-hidden="true"></div>
+
+    <!-- CH 04: THE METHOD -->
+    <section class="method" id="method" data-grade="magenta" data-chapter="04|The method" aria-labelledby="method-title">
+      <div class="amb amb--wind" data-amb="wind" aria-hidden="true"></div>
+      <header class="chapter-head">
+        <p class="slate"><span>Ch. 04</span> The method</p>
+        <h2 class="h-display" id="method-title" data-accent="last" data-split>From brief to the last post.</h2>
+      </header>
+      <div class="road">
+        <div class="road__trail" data-amb="trail" aria-hidden="true"></div>
+        <div class="road__convoy" id="convoy" data-el="convoy"></div>
+        <ol class="steps" id="process-steps"></ol>
+      </div>
+    </section>
+
+    <div class="seam" data-seam="night" aria-hidden="true"></div>
+
+    <!-- CH 05: THE NOTES (what I write) -->
+    <section class="notes" id="writing" data-grade="indigo" data-chapter="05|The notes" aria-labelledby="notes-title">
+      <div class="amb amb--tent" data-amb="tentNight" aria-hidden="true"></div>
+      <header class="chapter-head notes__head">
+        <p class="slate"><span>Ch. 05</span> The notes</p>
+        <h2 class="h-display" id="notes-title" data-accent="write" data-split>What I write when I'm not designing.</h2>
+        <p class="lede">On LinkedIn I write about marketing in Morocco: the language people buy in, how a story carries a campaign, and the media we all scroll through.</p>
+      </header>
+      <ul class="tapes" id="tapes"></ul>
+      <div class="notes__foot">
+        <a class="btn btn--solid" data-link="linkedin" href="https://www.linkedin.com/in/hicham-hebaz/" target="_blank" rel="noopener" data-nod>Follow on LinkedIn <svg><use href="#i-arrow"/></svg></a>
+        <span class="notes__meta">New notes most weeks · Darija, French, English</span>
+      </div>
+    </section>
+
+    <!-- CH 06: THE OFFER -->
+    <section class="offer-ch" id="offer" data-grade="amber" data-chapter="06|The offer" aria-labelledby="offer-title">
+      <div class="amb amb--noon" data-amb="noon" aria-hidden="true"></div>
+      <header class="chapter-head">
+        <p class="slate"><span>Ch. 06</span> The offer</p>
+        <h2 class="h-display" id="offer-title" data-accent="Four" data-split>Four ways to work together.</h2>
+        <p class="lede">Pick one, or let me take the whole thing from research to the last post.</p>
+      </header>
+      <ol class="services" id="services-grid"></ol>
+    </section>
+
+    <!-- CH 07: BEFORE YOU ASK -->
+    <section class="faq" id="faq" data-grade="amber" data-chapter="07|Before you ask" aria-labelledby="faq-title">
+      <div class="amb amb--rest" data-amb="rest" aria-hidden="true"></div>
+      <header class="chapter-head">
+        <p class="slate"><span>Ch. 07</span> Before you ask</p>
+        <h2 class="h-display" id="faq-title" data-accent="ask." data-split>Questions people ask.</h2>
+      </header>
+      <div class="faq__list" id="faq-list"></div>
+    </section>
+
+    <div class="seam" data-seam="dawn" aria-hidden="true"></div>
+
+    <!-- CH 08: YOUR STORY NEXT -->
+    <section class="cta" id="cta" data-grade="eclipse" data-chapter="08|Your story next" aria-labelledby="cta-title">
+      <div class="cta__sky" aria-hidden="true"><span class="cta__sun"><i class="cta__disc"></i></span><span class="dust d1"></span><span class="dust d2"></span></div>
+      <div class="amb amb--flock" data-amb="finale" aria-hidden="true"></div>
+      <div class="cta__ridges" data-el="ridges" aria-hidden="true"></div>
+      <div class="cta__inner">
+        <header class="cta__head">
+          <p class="slate"><span>Ch. 08</span> Your story next</p>
+          <h2 class="h-display" id="cta-title" data-accent="next." data-split>Your brand's story is next.</h2>
+          <p class="lede">Two ways in. Pick the one that fits where you are.</p>
+        </header>
+
+        <div class="paths">
+          <div class="path">
+            <p class="path__kicker">Not ready for a project?</p>
+            <h3>Get 3 fixes for your feed. Free.</h3>
+            <p>Send your Instagram handle. I'll reply by email with three concrete changes to your posts.</p>
+            <form class="audit" id="audit-form" novalidate>
+              <label class="sr-only" for="audit-handle">Your Instagram handle</label>
+              <span class="audit__at" aria-hidden="true">@</span>
+              <input id="audit-handle" name="handle" placeholder="yourbrand" autocomplete="off" maxlength="40" required>
+              <button class="btn btn--solid" type="submit" data-nod>Send</button>
+            </form>
+            <p class="path__micro" id="audit-msg">One reply. No newsletter.</p>
+          </div>
+
+          <form class="path path--brief form" id="contact-form" novalidate>
+            <p class="path__kicker">Ready to start?</p>
+            <h3>Send the brief.</h3>
+            <div class="form__row">
+              <label>Your name<input name="name" autocomplete="name" required maxlength="80"></label>
+              <label>Email<input name="email" type="email" autocomplete="email" required maxlength="120"></label>
+            </div>
+            <fieldset class="chips">
+              <legend>What do you need?</legend>
+              <label><input type="radio" name="type" value="Social media content" checked><span>Social content</span></label>
+              <label><input type="radio" name="type" value="Campaign creative"><span>Campaign</span></label>
+              <label><input type="radio" name="type" value="Marketing strategy"><span>Strategy</span></label>
+              <label><input type="radio" name="type" value="Ads"><span>Ads</span></label>
+            </fieldset>
+            <label>About the project<textarea name="message" rows="3" required maxlength="2000" placeholder="What you sell, who to, and when you need it."></textarea></label>
+            <p class="form__error" id="form-error" role="alert"></p>
+            <button class="btn btn--solid" type="submit" data-nod>Send the brief <svg><use href="#i-arrow"/></svg></button>
+          </form>
+        </div>
+        <p class="cta__direct">Or write directly: <a href="mailto:hello@yourdomain.com" data-profile="email">hello@yourdomain.com</a> · Rabat, Morocco · remote OK</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="credits">
+    <p class="credits__end">End credits</p>
+    <dl class="credits__list">
+      <div><dt>Strategy, copy &amp; design</dt><dd data-profile="name">Hicham Hebaz</dd></div>
+      <div><dt>Education</dt><dd>MADICE, FSJES Souissi, Université Mohammed V</dd></div>
+      <div><dt>Written notes</dt><dd><a data-link="linkedin" href="https://www.linkedin.com/in/hicham-hebaz/" target="_blank" rel="noopener">On LinkedIn</a></dd></div>
+      <div><dt>Based in</dt><dd>Rabat, Morocco</dd></div>
+    </dl>
+    <p class="credits__thanks"><span class="tifi" lang="ber">ⵜⴰⵏⵎⵎⵉⵔⵜ</span> Tanmmirt. Thank you for watching.</p>
+    <div class="credits__row">
+      <p>© <span id="year"></span> <span data-profile="name">Hicham Hebaz</span></p>
+      <ul>
+        <li><a data-link="instagram" href="#" target="_blank" rel="noopener">Instagram</a></li>
+        <li><a data-link="behance" href="#" target="_blank" rel="noopener">Behance</a></li>
+        <li><a data-link="linkedin" href="https://www.linkedin.com/in/hicham-hebaz/" target="_blank" rel="noopener">LinkedIn</a></li>
+      </ul>
+      <a href="#top">Back to the start ↑</a>
+    </div>
+  </footer>
+
+  <a class="sticky-cta" href="#cta">Start a project <svg><use href="#i-arrow"/></svg></a>
+
+  <dialog class="lightbox" id="lightbox" aria-labelledby="lb-title">
+    <div class="lightbox__head">
+      <div><p class="slate" id="lb-tag"></p><h3 id="lb-title"></h3></div>
+      <button class="lightbox__close" id="lb-close" aria-label="Close">✕</button>
+    </div>
+    <p class="lightbox__blurb" id="lb-blurb"></p>
+    <ul class="lightbox__roles" id="lb-roles"></ul>
+    <div class="carousel carousel--lb" id="lb-carousel" aria-roledescription="carousel">
+      <div class="carousel__track" id="lb-track" tabindex="0"></div>
+      <div class="carousel__ui">
+        <button class="carousel__btn" data-prev aria-label="Previous"><svg style="transform:scaleX(-1)"><use href="#i-arrow"/></svg></button>
+        <div class="carousel__bar"><i data-bar></i></div>
+        <button class="carousel__btn" data-next aria-label="Next"><svg><use href="#i-arrow"/></svg></button>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
