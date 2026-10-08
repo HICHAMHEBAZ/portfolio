@@ -1,0 +1,7 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "portfolio", "runtimeExecutable": "python", "runtimeArgs": ["-m", "http.server", "5500"], "port": 5500 },
+    { "name": "portfolio-ambient", "runtimeExecutable": "python", "runtimeArgs": ["-m", "http.server", "5510"], "port": 5510 }
+  ]
+}

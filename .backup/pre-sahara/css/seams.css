@@ -1,0 +1,72 @@
+/* ---------- chapter seams: dust that rolls over one scene and into the next ----------
+   A seam is not a section of its own. It slides up over the bottom of the scene
+   above (its sky is transparent there), and tucks under the top of the scene
+   below, where a mask dissolves the dust into that scene's own background. */
+.seam {
+  --overlap: clamp(110px, 18vh, 200px);
+  --under: clamp(70px, 12vh, 130px);
+  position: relative; z-index: 2; height: clamp(340px, 56vh, 560px); overflow: hidden; isolation: isolate;
+  margin: calc(var(--overlap) * -1) 0 calc(var(--under) * -1);
+  background: linear-gradient(180deg, transparent 0%, var(--sky-a) 30%, var(--sky-b) 78%);
+  -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - var(--under)), transparent);
+  mask-image: linear-gradient(180deg, #000 calc(100% - var(--under)), transparent);
+  pointer-events: none;
+}
+/* the credits strip above the first seam is the same ink, so it rises straight out of it */
+.seam[data-seam="rise"] { --overlap: 0px; }
+.seam__layer { position: absolute; inset: -12% -4% 0; will-change: transform; }
+.seam__layer svg { width: 100%; height: 100%; display: block; overflow: visible; }
+/* the front bank must always cover the seam's bottom edge so the next scene starts flush */
+.seam__bank:last-of-type { inset: -12% -4% -14%; }
+
+/* ambient life */
+.seam .bird { transform-box: fill-box; transform-origin: center; animation: flap .42s ease-in-out infinite alternate; }
+@keyframes flap { from { transform: scaleY(1); } to { transform: scaleY(-.55); } }
+.seam .star { animation: twinkle 3.6s ease-in-out infinite; }
+@keyframes twinkle { 50% { opacity: .25; } }
+.seam .wheel { transform-box: view-box; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* scenes that follow a seam fade their top edge into the seam's last bank */
+.noise::before, .proof::before {
+  content: ''; position: absolute; left: 0; right: 0; top: 0; height: 22vh; z-index: 0; pointer-events: none;
+}
+.noise::before { background: linear-gradient(#1a6a2c, transparent); }
+.proof::before { background: linear-gradient(#23246e, transparent); }
+.noise__pin, .proof__pin { position: relative; z-index: 1; }
+
+/* ---------- cinema bars ---------- */
+.cine { --cut: 0; position: fixed; inset: 0; z-index: 88; pointer-events: none; }
+.cine i { position: absolute; left: 0; right: 0; height: 100vh; background: #07050b; will-change: transform; }
+.cine i:first-child { bottom: 100%; transform: translateY(calc(var(--cut) * 100%)); }
+.cine i:last-child { top: 100%; transform: translateY(calc(var(--cut) * -100%)); }
+
+/* ---------- camera slate HUD ---------- */
+.hud {
+  position: fixed; left: var(--gutter); bottom: 1.4rem; z-index: 91; display: flex; align-items: center; gap: .8rem;
+  font: 600 .7rem/1 var(--font-body); letter-spacing: .2em; text-transform: uppercase; color: #fff;
+  mix-blend-mode: difference; pointer-events: none; opacity: 0; transition: opacity var(--t-slow) var(--ease);
+}
+.hud.is-on { opacity: .9; }
+/* the hero has its own credit row in the bottom letterbox */
+.hud.is-on.is-tucked { opacity: 0; }
+body.is-loading .hud { opacity: 0; }
+.hud__rec { width: 7px; height: 7px; border-radius: 50%; background: #fff; animation: rec 1.2s steps(2) infinite; }
+@keyframes rec { 50% { opacity: .15; } }
+.hud__win { display: inline-block; overflow: hidden; padding: .2em 0; }
+.hud__no, .hud__name { display: inline-block; }
+.hud__win--name { min-width: 11ch; }
+.hud__no::before { content: 'Ch. '; opacity: .6; }
+.hud__tc { font-variant-numeric: tabular-nums; letter-spacing: .12em; opacity: .7; padding-left: .8rem; border-left: 1px solid rgb(255 255 255 / .4); }
+
+@media (max-width: 760px) {
+  .seam { height: clamp(280px, 46vh, 400px); --overlap: 10vh; --under: 9vh; }
+  .hud { display: none; }
+}
+
+html.no-motion .seam { height: 240px; }
+html.no-motion .cine, html.no-motion .hud { display: none; }
+
+/* room for the dust: scenes above a seam end on open sky, scenes below start under it */
+.method, .faq { padding-bottom: calc(var(--section) + 12vh); }
+.notes { padding-top: calc(clamp(3rem, 6vw, 6rem) + 8vh); }

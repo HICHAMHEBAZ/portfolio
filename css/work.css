@@ -1,0 +1,71 @@
+/* ---------- CH 03: THE PROOF (pinned horizontal reel) ---------- */
+.proof__pin { height: 100svh; display: flex; flex-direction: column; justify-content: center; overflow: hidden; padding: 96px 0 2.5rem; }
+.proof .chapter-head { width: 100%; padding: 0 var(--gutter); margin-bottom: clamp(1.5rem, 4vh, 3rem); max-width: calc(var(--max) + 2 * var(--gutter)); }
+.proof .h-display { font-size: clamp(2.4rem, 1.2rem + 3.4vw, 5rem); max-width: 16ch; }
+.proof__meter { display: flex; align-items: center; gap: 1.2rem; margin-top: 1.6rem; }
+.proof__progress { flex: 1; height: 3px; background: var(--rule); }
+/* film leader: a cross-hair dial whose sector sweeps as the reel runs */
+.leader { display: inline-flex; align-items: center; gap: .6rem; font: 900 1.6rem/1 var(--font-display); color: var(--fg); }
+.leader svg { width: 44px; height: 44px; overflow: visible; rotate: -90deg; }
+.leader__ring { fill: var(--sun); stroke: var(--fg); stroke-width: 2.5; }
+.leader__cross { stroke: var(--fg); stroke-opacity: .3; stroke-width: 1; }
+/* a fat stroke on a half-radius circle draws a filled pie sector */
+.leader__sweep { fill: none; stroke: var(--hot); stroke-width: 17; stroke-dasharray: 1; stroke-dashoffset: var(--sweep, 1); }
+.leader__win { display: inline-block; overflow: hidden; padding: .1em 0; }
+.leader__win b { display: inline-block; font-weight: 400; min-width: 1.4ch; }
+.leader small { font: 600 .72rem var(--font-body); letter-spacing: .14em; color: var(--fg-dim); }
+.proof__progress i { display: block; height: 100%; background: var(--fg); transform: scaleX(0); transform-origin: left; }
+.reel { display: flex; gap: clamp(1.2rem, 2.4vw, 2.4rem); padding: 0 var(--gutter); width: max-content; will-change: transform; }
+.frame { width: clamp(250px, 24vw, 380px); flex: none; }
+.frame:nth-child(even) { margin-top: 2.5rem; }
+.frame button { display: block; width: 100%; padding: 0; border: 0; background: none; text-align: left; }
+/* each frame is a hero prop: ink outline, hard cel shadow, graded into the wash until you look at it */
+.frame__img { position: relative; aspect-ratio: 4 / 5; overflow: hidden; border-radius: var(--radius); background: var(--land-near); outline: var(--outline) solid var(--fg); box-shadow: 10px 12px 0 var(--land-near); }
+/* --drift is the scroll parallax (motion.js); kept off transform so the hover zoom keeps its own transition */
+.frame__img img { width: 100%; height: 100%; object-fit: cover; filter: var(--dt); translate: var(--drift, 0) 0; transform: scale(1.08); transition: filter var(--t-base), transform 1.4s var(--ease); }
+.frame button:hover .frame__img img, .frame button:focus-visible .frame__img img { filter: none; transform: scale(1); }
+.frame__no { position: absolute; top: .8rem; left: .8rem; padding: .3rem .5rem; border-radius: var(--radius); font: 900 1rem/1 var(--font-display); background: var(--fg); color: var(--kicker); }
+.frame__meta { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-top: 1.3rem; padding-top: .8rem; border-top: 1px solid var(--rule); }
+.frame__meta h3 { font: 800 1.6rem/1.05 var(--font-display); letter-spacing: -.015em; }
+.frame__meta p { margin: .3rem 0 0; font-size: .82rem; color: var(--fg-dim); }
+.frame__meta span { font-size: .8rem; color: var(--fg-dim); }
+.frame--end { align-self: center; display: grid; gap: 1.4rem; padding: 2.4rem; background: var(--land-near); color: var(--paper); --fg: var(--paper); --bg: var(--land-near); border-radius: var(--radius); outline: var(--outline) solid var(--fg); }
+.frame--end p { margin: 0; font: italic 800 2rem/1.08 var(--font-display); }
+
+/* ---------- case scenes ---------- */
+.case { display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(2rem, 6vw, 6rem); align-items: center; padding: var(--section) var(--gutter); overflow: hidden; }
+.case--flip .case__media { order: 2; }
+.case__media { position: relative; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.6rem; align-items: center; }
+.case__story { max-width: 560px; }
+.case__story .h-display { font-size: clamp(2.4rem, 1.2rem + 3.2vw, 4.6rem); margin-bottom: 2rem; }
+.story-beats { display: grid; gap: 1.4rem; margin: 0 0 2rem; }
+.story-beats div { display: grid; grid-template-columns: 7.5rem 1fr; gap: 1rem; padding-top: 1.1rem; border-top: 1px solid var(--rule); }
+.story-beats dt { font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; padding-top: .3rem; }
+.story-beats dd { margin: 0; font-size: 1.02rem; }
+.case { padding-bottom: calc(var(--section) + var(--land-room) * .6); }
+.case .carousel__slide { width: clamp(220px, 24vw, 340px); aspect-ratio: 4 / 5; outline: var(--outline) solid var(--land-near); outline-offset: -1px; box-shadow: 10px 12px 0 var(--land-near); }
+
+.deck { position: relative; width: min(100%, 460px); aspect-ratio: 1; margin: 0 auto; touch-action: pan-y; grid-column: 1 / -1; }
+.deck__card { position: absolute; inset: 0; overflow: hidden; border-radius: var(--radius); background: var(--land-near); outline: var(--outline) solid var(--land-near); box-shadow: 10px 12px 0 var(--land-near); cursor: grab; user-select: none; will-change: transform; transition: transform var(--t-base) var(--ease); }
+.deck__card img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.deck__card.is-dragging { transition: none; cursor: grabbing; }
+.deck-hint { font-size: .82rem; color: var(--fg-dim); }
+
+.fan { position: relative; height: clamp(340px, 36vw, 500px); grid-column: 1 / -1; }
+.fan button { position: absolute; top: 50%; left: 50%; width: 56%; aspect-ratio: 1; padding: 0; border: 0; border-radius: var(--radius); overflow: hidden; background: var(--land-near); outline: var(--outline) solid var(--land-near); box-shadow: 10px 12px 0 var(--land-near); transition: box-shadow var(--t-base); }
+.fan button img { width: 100%; height: 100%; object-fit: cover; }
+
+@media (max-width: 960px) {
+  .case { grid-template-columns: 1fr; }
+  .case--flip .case__media { order: 0; }
+}
+@media (max-width: 760px) {
+  .proof__pin { height: auto; padding: var(--section) 0; }
+  .proof__meter { display: none; }
+  .reel { width: auto; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 1rem; scrollbar-width: none; }
+  .reel > * { scroll-snap-align: start; }
+  .frame { width: 78vw; }
+  .frame:nth-child(even) { margin-top: 0; }
+  .frame__img img { filter: none; }
+  .story-beats div { grid-template-columns: 1fr; gap: .3rem; }
+}

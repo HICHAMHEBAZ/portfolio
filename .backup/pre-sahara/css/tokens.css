@@ -1,0 +1,59 @@
+/* Visual direction after Tinariwen "Erghad Afewo" (dir. Axel Digoix, WIZZ):
+   wide horizons, isolated figures, heavy grain, and a different colour grade
+   for every scene. Each chapter of the page sets its grade with data-grade. */
+:root {
+  --ink: #120d1a;
+  --ink-2: #1b1426;
+  --bone: #f4ead8;
+  --bone-dim: rgb(244 234 216 / .68);
+  --line-soft: rgb(244 234 216 / .18);
+
+  --saffron: #f5bd2c;
+  --ember: #e86a2a;
+  --peach: #f6b38b;
+  --pink: #ef8fb6;
+  --teal: #3f8c8f;
+  --acid: #6fe36a;
+  --ultra: #3b3fae;
+  --orange-cloud: #e98b5c;
+  --magenta: #b43ec6;
+  --gold: #f2a54a;
+  --red: #c8261c;
+  --forest: #1d6b3a;
+
+  --font-display: 'Instrument Serif', 'Times New Roman', serif;
+  --font-body: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-tifi: 'Noto Sans Tifinagh', sans-serif;
+
+  --text-hero: clamp(3.2rem, 1.4rem + 6.2vw, 8.4rem);
+  --text-h2: clamp(2.6rem, 1.4rem + 4vw, 6rem);
+  --text-h3: clamp(1.6rem, 1.2rem + 1.4vw, 2.6rem);
+  --text-narr: clamp(1.9rem, 1rem + 3.4vw, 4.6rem);
+  --text-body: clamp(1rem, .96rem + .2vw, 1.12rem);
+
+  --gutter: clamp(1.25rem, .5rem + 3.5vw, 4rem);
+  --section: clamp(6rem, 3rem + 9vw, 12rem);
+  --max: 1360px;
+  --radius: 4px;
+
+  /* motion: one curve, three durations; the house entrance is a focus pull */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --t-quick: 200ms;
+  --t-base: 500ms;
+  --t-slow: 1000ms;
+
+  /* default grade */
+  --bg: var(--ink);
+  --fg: var(--bone);
+  --fg-dim: var(--bone-dim);
+  --accent: var(--saffron);
+  --rule: var(--line-soft);
+  --dt: url(#dt-ultra);
+}
+
+[data-grade="saffron"] { --bg: #f2b52c; --fg: #1a1012; --fg-dim: rgb(26 16 18 / .72); --accent: #1a1012; --rule: rgb(26 16 18 / .22); --dt: url(#dt-saffron); --glow: var(--pink); }
+[data-grade="green"]   { --bg: #0b1f10; --fg: #e6f7cf; --fg-dim: rgb(230 247 207 / .66); --accent: var(--acid); --rule: rgb(230 247 207 / .16); --dt: url(#dt-green); --glow: #2fae4a; }
+[data-grade="ultra"]   { --bg: #23246e; --fg: var(--bone); --fg-dim: var(--bone-dim); --accent: var(--orange-cloud); --rule: var(--line-soft); --dt: url(#dt-ultra); --glow: var(--orange-cloud); }
+[data-grade="magenta"] { --bg: #3a1450; --fg: var(--bone); --fg-dim: var(--bone-dim); --accent: var(--gold); --rule: var(--line-soft); --dt: url(#dt-magenta); --glow: var(--magenta); }
+[data-grade="red"]     { --bg: #0f2a1a; --fg: var(--bone); --fg-dim: var(--bone-dim); --accent: #ff5a43; --rule: var(--line-soft); --dt: url(#dt-green); --glow: var(--red); }
+[data-grade="night"]   { --bg: var(--ink); --fg: var(--bone); --fg-dim: var(--bone-dim); --accent: var(--saffron); --rule: var(--line-soft); --dt: url(#dt-ultra); --glow: var(--ultra); }

@@ -1,0 +1,96 @@
+/* CH 01: the figure is the subject. The quote is set around him: one line left,
+   one line right, and the key word painted into the sky behind him (3D).
+   On desktop the stage pins and the description plays as subtitles. */
+.hero { --text-quote: clamp(2.6rem, 1rem + 4.4vw, 6.6rem); background: linear-gradient(180deg, #f6c535 0%, #f2a93a 55%, #ef9aa6 100%); }
+.hero__stage { position: relative; height: 100svh; min-height: 640px; overflow: hidden; isolation: isolate; }
+.hero__canvas { position: absolute; inset: 0; z-index: -1; }
+.hero__canvas canvas { display: block; width: 100%; height: 100%; }
+.hero__fallback { position: absolute; left: 50%; bottom: 12%; height: 56%; width: auto; translate: -50% 0; }
+.hero__canvas.is-live .hero__fallback { display: none; }
+
+/* the subtitles and buttons sit on the dark rubble, so the foot of the frame
+   is shaded a touch deeper and they read in bone */
+.hero__stage::after {
+  content: ''; position: absolute; z-index: 0; inset: auto 0 0; height: 42%; pointer-events: none;
+  background: linear-gradient(180deg, transparent, rgb(18 13 26 / .38) 70%, rgb(18 13 26 / .55));
+}
+
+.letterbox { position: absolute; left: 0; right: 0; z-index: 3; height: 72px; background: #07050b; color: var(--bone); }
+.letterbox--top { top: 0; }
+.letterbox--bottom { bottom: 0; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0 var(--gutter); font-size: .82rem; }
+.credits-row { display: flex; flex-wrap: wrap; gap: .4rem 2.2rem; color: var(--bone-dim); }
+.credits-row b { font: italic 400 1.25rem var(--font-display); color: var(--bone); margin-right: .35rem; }
+.scroll-cue { display: inline-flex; align-items: center; gap: .7rem; letter-spacing: .2em; text-transform: uppercase; font-size: .7rem; color: var(--bone-dim); }
+.scroll-cue i { width: 1px; height: 28px; background: linear-gradient(var(--bone) 50%, transparent 50%); background-size: 100% 200%; animation: cue 1.6s linear infinite; }
+@keyframes cue { to { background-position: 0 -200%; } }
+
+.hero__slate { position: absolute; z-index: 2; left: var(--gutter); top: calc(72px + clamp(1.2rem, 4vh, 2.4rem)); margin: 0; }
+
+/* ---------- the quote, set around the figure ---------- */
+.hero__title { font: 400 var(--text-quote)/.9 var(--font-display); letter-spacing: -.02em; color: var(--fg); }
+.hero__line { position: absolute; z-index: 2; }
+.hero__line--a { left: var(--gutter); top: 30%; }
+.hero__line--b { right: var(--gutter); top: 50%; text-align: right; }
+.hero__title .line { display: block; overflow: hidden; padding-bottom: .08em; }
+.hero__title .line > span { display: inline-block; }
+/* DOM stand-in for the sky word; hidden (but still read) once the 3D word is up */
+.hero__word {
+  position: absolute; z-index: 1; left: 50%; top: 14%; translate: -50% 0;
+  font-size: clamp(5rem, 2rem + 12vw, 15rem); line-height: 1; white-space: nowrap; pointer-events: none;
+}
+.hero__word em { color: #fff6e0; text-shadow: 0 0 60px rgb(239 143 182 / .7); }
+.hero.has-3d .hero__word { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+/* ---------- subtitles + actions ---------- */
+.hero__subs { position: absolute; z-index: 2; left: var(--gutter); bottom: calc(72px + clamp(3rem, 8vh, 5rem)); width: min(30rem, 38vw); height: 5.2em; font: 400 clamp(1.2rem, .9rem + .7vw, 1.65rem)/1.25 var(--font-display); }
+.hero__sub { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; color: var(--bone); opacity: 0; text-shadow: 0 2px 18px rgb(18 13 26 / .55); }
+.hero__sub[data-sub="0"] { opacity: 1; }
+.hero__sub strong { font-weight: 400; font-style: italic; }
+.hero__sub em { color: var(--saffron); }
+.hero__beats { position: absolute; z-index: 2; left: var(--gutter); bottom: calc(72px + clamp(1.4rem, 4vh, 2.4rem)); display: flex; gap: .4rem; }
+.hero__beats i { width: 28px; height: 2px; background: rgb(244 234 216 / .3); overflow: hidden; }
+.hero__beats i::after { content: ''; display: block; height: 100%; background: var(--bone); transform: scaleX(var(--fill, 0)); transform-origin: left; }
+.hero__beats i:first-child { --fill: 1; }
+
+.hero__ctas { position: absolute; z-index: 2; right: var(--gutter); bottom: calc(72px + clamp(1.4rem, 4vh, 2.4rem)); display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .8rem; }
+.hero .btn--solid { background: var(--bone); color: var(--ink); }
+.hero .btn--solid::before { background: var(--saffron); }
+.hero .btn--ghost { color: var(--bone); }
+.hero .btn--ghost:hover { color: var(--ink); }
+.hero .btn--ghost::before { background: var(--bone); }
+
+@media (max-width: 1000px) {
+  .hero__line--a { top: 24%; }
+  .hero__line--b { top: 40%; }
+  .hero__subs { width: 44vw; }
+}
+
+/* mobile: no pin. The figure holds the top of the frame, the copy stacks below. */
+@media (max-width: 760px) {
+  .hero { --fg: var(--bone); --fg-dim: rgb(244 234 216 / .82); --text-quote: clamp(2.6rem, 1.4rem + 7vw, 3.6rem); }
+  .hero__stage { display: flex; flex-direction: column; justify-content: flex-end; gap: 1rem; padding: 0 var(--gutter) calc(56px + 1.4rem); }
+  .hero__stage::after { inset: auto 0 0; height: 68%; filter: none; background: linear-gradient(180deg, transparent 0%, rgb(18 13 26 / .6) 35%, rgb(18 13 26 / .9) 100%); }
+  .letterbox { height: 56px; }
+  .letterbox--top { height: 72px; }
+  .credits-row { font-size: .72rem; gap: .2rem 1rem; }
+  .credits-row li:nth-child(2) { display: none; }
+  .scroll-cue { display: none; }
+  .hero__slate { display: none; }
+  .hero__title, .hero__subs, .hero__ctas { position: relative; z-index: 2; }
+  .hero__line { position: static; display: block; text-align: left; }
+  .hero__line--b { padding-left: 1.2em; }
+  .hero__word { top: 16%; font-size: 26vw; }
+  .hero__subs { position: relative; left: auto; bottom: auto; width: auto; height: auto; font-size: 1.15rem; }
+  .hero__sub { position: static; opacity: 1; display: inline; }
+  .hero__beats { display: none; }
+  .hero__ctas { position: relative; right: auto; bottom: auto; justify-content: flex-start; }
+  .hero .btn--solid { background: var(--bone); color: var(--ink); }
+  .hero .btn--ghost { color: var(--bone); }
+  .hero .btn--ghost::before { background: var(--bone); }
+  .hero .btn--ghost:hover { color: var(--ink); }
+  .hero__sub em { color: var(--saffron); text-shadow: none; }
+}
+
+/* reduced motion / no GSAP: all three subtitles read as one paragraph */
+html.no-motion .hero__subs { height: auto; }
+html.no-motion .hero__sub { position: static; opacity: 1; display: inline; }

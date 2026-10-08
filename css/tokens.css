@@ -1,0 +1,139 @@
+/* "Sahara Cinema" system, after Tinariwen "Erghad Afewo" (dir. Axel Digoix, WIZZ).
+   One saturated wash per chapter: ink in the shadows, one hue through the mids,
+   a pale cream light. Silhouettes are --land-near, one --hot detail per object,
+   flat cel fills; gradients live only in the sky and the haze.
+   Each chapter picks its wash with data-grade. */
+:root {
+  /* shared neutrals */
+  --night: #090420;
+  --ink: #0d0820;
+  --ink-2: #160f2c;
+  --paper: #fff3e2;
+  --bone: var(--paper);
+  --bone-dim: rgb(255 243 226 / .7);
+  --line-soft: rgb(255 243 226 / .18);
+
+  /* film core palette (reference; chapters use the scene tokens below) */
+  --film-amber: #fdba2c;
+  --film-alarm: #d71b19;
+  --film-magenta: #e951c5;
+  --film-jungle: #24944e;
+  --film-acid: #4cce3e;
+  --film-sky: #1ca9e4;
+  --film-cobalt: #234fb5;
+  --film-indigo: #2e2e7b;
+  --film-cream: #fefecb;
+  /* legacy names still used by a few components */
+  --saffron: var(--film-amber);
+  --acid: var(--film-acid);
+
+  --font-display: 'Fraunces', 'Thmanyah Serif Display', Georgia, serif;
+  --font-body: 'Bricolage Grotesque', 'Thmanyah Sans', system-ui, sans-serif;
+  --font-tifi: 'Noto Sans Tifinagh', sans-serif;
+
+  --text-hero: clamp(3.2rem, 1.4rem + 6.2vw, 8.4rem);
+  --text-h2: clamp(2.5rem, 1.3rem + 3.8vw, 5.6rem);
+  --text-h3: clamp(1.5rem, 1.15rem + 1.3vw, 2.4rem);
+  --text-narr: clamp(1.9rem, 1rem + 3.2vw, 4.4rem);
+  --text-numeral: clamp(9rem, 4rem + 18vw, 22rem);
+  --text-body: clamp(1rem, .96rem + .2vw, 1.12rem);
+
+  --gutter: clamp(1.25rem, .5rem + 3.5vw, 4rem);
+  --section: clamp(6rem, 3rem + 9vw, 12rem);
+  --max: 1360px;
+  --radius: 4px;
+  --outline: 3px; /* the ink line on hero props, scaled down from the 6-7px slide line */
+
+  /* motion identity, "cinematic premium" */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-ambient: cubic-bezier(0.45, 0, 0.55, 1);
+  --ease-wash: cubic-bezier(0.65, 0, 0.35, 1);
+  --t-quick: 380ms;
+  --t-base: 650ms;
+  --t-slow: 1100ms;
+  --t-wash: 1400ms;
+
+  /* default grade */
+  --bg: var(--ink);
+  --fg: var(--bone);
+  --fg-dim: var(--bone-dim);
+  --accent: var(--film-amber);
+  --rule: var(--line-soft);
+  --dt: url(#dt-indigo); --kicker: var(--sky-3); --blend: screen;
+}
+
+/* ---------- scene washes ----------
+   Every set: --sky-1..3 --land-far --land-near --haze --haze-2 --hot --sun --halo,
+   plus the component contract --bg --fg --fg-dim --accent --rule --dt.
+   LIGHT: amber, magenta, jungle, road (ink text on sky).
+   DARK:  alarm, indigo, eclipse (pale text; --sky-3 stays dark). */
+
+/* Amber Desert: noon sand, ink-teal ridge, cobalt accent (0:00) */
+[data-grade="amber"], [data-grade="saffron"] {
+  --sky-1: #fed66a; --sky-2: #fdc82f; --sky-3: #fdb52b;
+  --land-far: #374f4d; --land-near: #1d142c;
+  --haze: #fff3b0; --haze-2: #fbb070;
+  --hot: #234fb5; --sun: #fefecb; --halo: rgb(254 254 203 / .6);
+  --bg: var(--sky-2); --fg: #1d142c; --fg-dim: rgb(29 20 44 / .74); --accent: var(--hot);
+  --rule: rgb(29 20 44 / .22); --dt: url(#dt-amber); --kicker: var(--sky-1); --blend: multiply; --numeral: #fdb52b;
+}
+
+/* Magenta Dusk: coral light, pink dust, purple ink (2:43) */
+[data-grade="magenta"] {
+  --sky-1: #fdb465; --sky-2: #f7936d; --sky-3: #e951c5;
+  --land-far: #7a2a86; --land-near: #2c072d;
+  --haze: #fc8f6c; --haze-2: #e951c5;
+  --hot: #a0187c; --sun: #fff1c9; --halo: rgb(253 180 101 / .6);
+  --bg: var(--sky-2); --fg: #2c072d; --fg-dim: rgb(44 7 45 / .74); --accent: var(--hot);
+  --rule: rgb(44 7 45 / .22); --dt: url(#dt-magenta); --kicker: var(--sky-1); --blend: multiply; --numeral: #e951c5;
+}
+
+/* Night Green: glowing lime sky, black eclipse sun, red tension (0:48) */
+[data-grade="jungle"], [data-grade="green"] {
+  --sky-1: #fdfdb5; --sky-2: #8bdc58; --sky-3: #24944e;
+  --land-far: #18482d; --land-near: #08100b;
+  --haze: #d9f7a0; --haze-2: #4cce3e;
+  --hot: #c4161a; --sun: #050d08; --halo: rgb(76 206 62 / .75);
+  --bg: var(--sky-2); --fg: #08100b; --fg-dim: rgb(8 16 11 / .74); --accent: var(--hot);
+  --rule: rgb(8 16 11 / .22); --dt: url(#dt-jungle); --kicker: var(--sky-1); --blend: multiply; --numeral: #4cce3e;
+}
+
+/* Road Blue: daylight cyan, amber ground, deep orange accent (2:12) */
+[data-grade="road"], [data-grade="ultra"] {
+  --sky-1: #4fc8ea; --sky-2: #1ca9e4; --sky-3: #0c57ae;
+  --land-far: #fd9d28; --land-near: #0c2a5e;
+  --haze: #f5e1b0; --haze-2: #fdba46;
+  --hot: #e8590c; --sun: #f5e1b0; --halo: rgb(245 225 176 / .6);
+  --bg: var(--sky-2); --fg: #0a1a3a; --fg-dim: rgb(10 26 58 / .76); --accent: var(--hot);
+  --rule: rgb(10 26 58 / .24); --on-hot: #0a1a3a; --dt: url(#dt-road); --kicker: var(--sky-1); --blend: multiply; --numeral: #4fc8ea;
+}
+
+/* Alarm Red: street red, dark green ground, yellow accent (0:33). DARK */
+[data-grade="alarm"], [data-grade="red"] {
+  --sky-1: #f34a71; --sky-2: #d71b19; --sky-3: #730c0f;
+  --land-far: #18482d; --land-near: #08100b;
+  --haze: #efb1b0; --haze-2: #ea2b2e;
+  --hot: #fdd832; --sun: #f34a71; --halo: rgb(243 74 113 / .55);
+  --bg: var(--sky-2); --fg: #fff0e2; --fg-dim: rgb(255 240 226 / .78); --accent: var(--hot);
+  --rule: rgb(255 240 226 / .22); --dt: url(#dt-alarm); --kicker: var(--sky-3); --blend: screen; --numeral: #f34a71;
+}
+
+/* Tent Indigo: the night circle, lamp amber accent (1:58). DARK */
+[data-grade="indigo"], [data-grade="night"], [data-grade="tape"] {
+  --sky-1: #4a4e99; --sky-2: #2e2e7b; --sky-3: #0c0131;
+  --land-far: #312c70; --land-near: #070120;
+  --haze: #4a4e99; --haze-2: #234fb5;
+  --hot: #fdba2c; --sun: #f5e1b0; --halo: rgb(245 225 176 / .45);
+  --bg: var(--sky-2); --fg: #fefecb; --fg-dim: rgb(254 254 203 / .74); --accent: var(--hot);
+  --rule: rgb(254 254 203 / .18); --dt: url(#dt-indigo); --numeral: #4a4e99;
+}
+
+/* Ringed Sun: the finale, violet night, cream ring, hot orange core (3:25). DARK */
+[data-grade="eclipse"] {
+  --sky-1: #4657b0; --sky-2: #2f3186; --sky-3: #160a33;
+  --land-far: #2a2470; --land-near: #0a0427;
+  --haze: #8e48d0; --haze-2: #fd9d28;
+  --hot: #fd9d28; --sun: #fd9d28; --halo: rgb(253 157 40 / .65);
+  --bg: var(--sky-2); --fg: #fefecb; --fg-dim: rgb(254 254 203 / .76); --accent: var(--hot);
+  --rule: rgb(254 254 203 / .2); --dt: url(#dt-eclipse); --kicker: var(--sky-3); --blend: screen; --numeral: #4657b0;
+}

@@ -1,0 +1,87 @@
+/* ---------- Sahara Cinema scenery kit (js/film-props.js) ----------
+   Layers back to front, as on the slides:
+   sky gradient -> sun + halo -> far ridge -> props -> near ridge -> haze -> copy -> grain */
+
+/* the sky: every chapter is one wash, pale at the top, deepest toward the land */
+[data-grade] {
+  background: linear-gradient(180deg, var(--sky-1) 0%, var(--sky-2) 46%, var(--sky-end, var(--sky-3)) 100%);
+  transition: color var(--t-wash) var(--ease-wash);
+}
+/* road blue keeps its deepest blue for the ground, so ink copy still reads low in the frame */
+[data-grade="road"], [data-grade="ultra"] { --sky-end: #1590d6; }
+/* alarm red: the pale red stays in one corner, away from the copy */
+[data-grade="alarm"], [data-grade="red"] {
+  background:
+    radial-gradient(60% 45% at 78% 72%, rgb(239 177 176 / .35), transparent 70%),
+    radial-gradient(50% 45% at 12% 18%, var(--sky-1), transparent 70%),
+    linear-gradient(160deg, var(--sky-2) 0%, #b5161a 50%, var(--sky-3) 100%);
+}
+
+/* the one light source; the halo is its own layer so breathing stays on the compositor */
+.s-sun {
+  position: absolute; left: var(--x); top: var(--y); width: var(--size); aspect-ratio: 1; translate: -50% 0;
+  border-radius: 50%; background: var(--sun); z-index: 0; pointer-events: none;
+}
+.s-sun::before {
+  content: ''; position: absolute; inset: -70%; z-index: -1; border-radius: 50%;
+  background: radial-gradient(circle, var(--halo) 0 30%, transparent 68%);
+  animation: breathe 6s var(--ease-ambient) infinite alternate;
+}
+/* night green: the sun is a black disc with a green corona */
+.s-sun--eclipse { background: var(--sun); box-shadow: 0 0 0 4px var(--haze); }
+@keyframes breathe { from { scale: .9; opacity: .75; } to { scale: 1.08; opacity: 1; } }
+
+.s-haze {
+  position: absolute; left: var(--x); top: var(--y); width: var(--w); height: var(--h);
+  border-radius: 50%; filter: blur(46px); opacity: .6; pointer-events: none; z-index: 0;
+  animation: haze-drift 14s var(--ease-ambient) infinite alternate;
+}
+@keyframes haze-drift { to { translate: -40px -14px; scale: 1.08; } }
+
+/* low wide horizon: the land never climbs above the lower 40% of a chapter */
+.s-land {
+  position: absolute; left: 0; right: 0; bottom: -1px; width: 100%;
+  height: var(--land-h, clamp(110px, 15vw, 230px)); z-index: 0; pointer-events: none; overflow: visible;
+}
+.s-land__far { fill: var(--land-far); animation: ridge-drift 24s var(--ease-ambient) infinite alternate; }
+.s-land__near { fill: var(--land-near); }
+.s-land__rim { fill: none; stroke: var(--hot); stroke-width: 3; opacity: .55; translate: 0 -4px; }
+.s-land__props { animation: ridge-drift-mid 24s var(--ease-ambient) infinite alternate; }
+@keyframes ridge-drift { to { translate: -90px 0; } }
+@keyframes ridge-drift-mid { to { translate: -40px 0; } }
+
+/* chapters that carry land keep their last line of copy above it */
+.method, .notes, .offer-ch, .faq, .case { --land-room: clamp(70px, 10vw, 160px); }
+
+/* ---------- carousel grammar on the web ---------- */
+/* kicker: an ink pill with sky-coloured text (dark scenes invert) */
+.slate {
+  display: inline-flex; align-items: center; gap: .7rem; margin: 0 0 1.4rem; padding: .5rem .9rem .5rem .75rem;
+  font: 600 .72rem/1 var(--font-body); letter-spacing: .2em; text-transform: uppercase;
+  background: var(--fg); color: var(--kicker, var(--bg)); border-radius: var(--radius);
+}
+.slate span { display: inline-flex; align-items: center; gap: .5rem; padding: 0; border: 0; color: inherit; font-weight: 700; }
+.slate span::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--hot, var(--accent)); }
+
+/* the giant numeral stands behind the headline, at the far edge from the copy */
+.chapter-head, .cta__head, .noise__copy { position: relative; isolation: isolate; }
+.numeral {
+  position: absolute; right: -.04em; top: -.32em; z-index: -1; pointer-events: none; user-select: none;
+  font: 900 var(--text-numeral)/1 var(--font-display); letter-spacing: -.04em;
+  color: var(--numeral, var(--hot)); mix-blend-mode: var(--blend, multiply); opacity: .9;
+}
+[data-grade="alarm"] .numeral, [data-grade="indigo"] .numeral, [data-grade="eclipse"] .numeral { opacity: .75; }
+.noise__copy .numeral { top: -.6em; right: auto; left: -.06em; }
+
+/* one accent word per headline, in the scene's hot colour */
+.h-display .w--accent { color: var(--hot, var(--accent)); font-style: italic; }
+
+/* blocks: dot + colour subheads, like the slides' h3 */
+.story-beats dt { display: flex; align-items: center; gap: .5rem; color: var(--fg); font-weight: 700; }
+.story-beats dt::before { content: ''; flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--hot, var(--accent)); }
+
+@media (max-width: 760px) {
+  .numeral { font-size: clamp(7rem, 34vw, 11rem); top: -.18em; }
+  .s-land { --land-h: clamp(80px, 24vw, 130px); }
+}
+html.no-motion .s-sun::before, html.no-motion .s-haze, html.no-motion .s-land__far, html.no-motion .s-land__props { animation: none; }

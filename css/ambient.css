@@ -1,0 +1,76 @@
+/* ---------- ambient life (js/ambient-art.js, js/ambient.js) ----------
+   Transform ownership, so nothing fights over one element:
+     GSAP pointer -> x / y      GSAP scroll -> xPercent / yPercent / rotation
+     CSS loops    -> translate / rotate / scale (individual properties)
+   Stillness is part of the style: one quiet loop per chapter, never a busy one. */
+.amb { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.amb:not(.is-live), .amb:not(.is-live) * { animation-play-state: paused !important; }
+
+/* real content always sits above its scene's ambient layer */
+.case > :not(.amb), .method > .chapter-head, .offer-ch > .chapter-head, .faq > .chapter-head,
+.faq__list, .proof__pin > .chapter-head, .reel, .services, .road, .notes > :not(.amb) { position: relative; z-index: 1; }
+.faq { overflow: hidden; }
+/* the proof's land sits under the reel, never over a frame */
+.amb--road .s-land { --land-h: clamp(90px, 12vw, 180px); }
+
+/* ---------- Okla: steam off the plate (haze, flat strokes) ---------- */
+.steam { position: absolute; right: calc(var(--gutter) + 10%); top: 0; width: clamp(200px, 22vw, 320px); }
+.steam svg { width: 100%; height: auto; overflow: visible; }
+.wisp {
+  fill: none; stroke: var(--haze); stroke-width: 18; stroke-linecap: round; opacity: .8;
+  stroke-dasharray: 22 300; stroke-dashoffset: 344; animation: rise 5s cubic-bezier(.4, 0, .2, 1) var(--dl) infinite;
+}
+@keyframes rise { 0% { stroke-dashoffset: 344; opacity: 0; } 30% { opacity: .8; } 100% { stroke-dashoffset: 222; opacity: 0; } }
+
+/* ---------- Wa3i: questions in the alarm air ---------- */
+.q { position: absolute; left: var(--x); top: var(--y); font: italic 900 var(--size)/1 var(--font-display); animation: sway var(--d) var(--ease-ambient) var(--dl) infinite alternate; }
+.q--pale { color: rgb(255 240 226 / .14); }
+.q--hot { color: var(--hot); opacity: .85; }
+.q--outline { color: transparent; -webkit-text-stroke: 2px rgb(255 240 226 / .35); }
+@keyframes sway { from { rotate: -6deg; } to { rotate: 6deg; } }
+
+/* ---------- Ch. 04: wind + tracks + lit steps ---------- */
+.gust {
+  position: absolute; left: 0; top: var(--y); width: var(--w); height: 2px; opacity: 0; border-radius: 2px;
+  background: var(--haze);
+  animation: gust var(--d) cubic-bezier(.4, 0, .2, 1) var(--dl) infinite;
+}
+@keyframes gust { 0% { translate: -30vw 0; opacity: 0; } 15%, 85% { opacity: .55; } 100% { translate: 110vw -14px; opacity: 0; } }
+.road__trail { position: absolute; left: 0; right: 0; top: calc(7.2rem - 16px); height: 12px; clip-path: inset(0 100% 0 0); pointer-events: none; }
+.road__trail svg { display: block; width: 100%; height: 100%; }
+.road__trail path { fill: none; stroke: var(--land-near); stroke-opacity: .6; stroke-width: 2; stroke-dasharray: 4 7; vector-effect: non-scaling-stroke; }
+.step { position: relative; }
+.step::before {
+  content: ''; position: absolute; left: 0; top: -6px; width: 11px; height: 11px; border-radius: 50%;
+  background: var(--hot); box-shadow: 0 0 0 3px var(--land-near); scale: 0;
+  transition: scale var(--t-base) cubic-bezier(.175, .885, .32, 1.275);
+}
+.step.is-lit::before { scale: 1; }
+
+/* ---------- night skies (notes, finale) ---------- */
+.stars { position: absolute; inset: 0; width: 100%; height: 100%; }
+.stars .tw { animation: tw var(--d) var(--ease-ambient) var(--dl) infinite alternate; }
+@keyframes tw { from { opacity: .9; } to { opacity: .2; } }
+/* the lamp in the tent door: the one warm light in the night circle */
+.amb--tent .s-lamp { animation: lamp 3.2s steps(1) infinite; }
+@keyframes lamp { 0%, 100% { opacity: 1; } 41% { opacity: .82; } 43% { opacity: 1; } 77% { opacity: .9; } }
+.yaz { position: absolute; right: 8%; top: 10%; width: clamp(90px, 10vw, 160px); }
+.yaz svg { width: 100%; height: auto; overflow: visible; }
+.yaz__line { fill: none; stroke: var(--sun); stroke-opacity: .55; stroke-width: 1.4; stroke-dasharray: 1; vector-effect: non-scaling-stroke; }
+.yaz__star { fill: var(--paper); animation: tw 3s var(--ease-ambient) infinite alternate; }
+.yaz__star:nth-child(odd) { animation-delay: -1.4s; }
+
+/* ---------- Ch. 08: the flock crosses the ringed sun, under the forms ---------- */
+.flock { position: absolute; left: 6%; bottom: clamp(150px, 20vw, 300px); width: clamp(180px, 24vw, 340px); }
+.flock svg { width: 100%; height: auto; overflow: visible; }
+.flock .bird { transform-box: fill-box; transform-origin: center; animation: flap .42s ease-in-out infinite alternate; }
+.cta__ridges .walker { animation: walk 1.2s ease-in-out infinite; transform-box: fill-box; transform-origin: bottom; }
+.cta__ridges .ridge-caravan { animation: trek 150s linear -55s infinite; }
+@keyframes trek { from { transform: translateX(-260px); } to { transform: translateX(1700px); } }
+
+@media (max-width: 760px) {
+  .q { font-size: calc(var(--size) * .6); }
+  .yaz { top: 3%; right: 5%; }
+  .steam { right: 4%; width: 46vw; }
+}
+html.no-motion .gust { display: none; }
