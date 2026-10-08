@@ -25,7 +25,14 @@ function boot() {
   initForm();
   initAuditForm();
   initMotion({ hero });
-  loadHero();
+  scheduleHero();
+}
+
+function scheduleHero() {
+  if (navigator.connection?.saveData) return;
+  const start = () => (window.requestIdleCallback ? requestIdleCallback(loadHero) : setTimeout(loadHero, 200));
+  if (document.readyState === 'complete') start();
+  else window.addEventListener('load', start, { once: true });
 }
 
 async function loadHero() {

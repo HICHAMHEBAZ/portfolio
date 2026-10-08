@@ -21,9 +21,9 @@
 .frame button { display: block; width: 100%; padding: 0; border: 0; background: none; text-align: left; }
 /* each frame is a hero prop: ink outline, hard cel shadow, graded into the wash until you look at it */
 .frame__img { position: relative; aspect-ratio: 4 / 5; overflow: hidden; border-radius: var(--radius); background: var(--land-near); outline: var(--outline) solid var(--fg); box-shadow: 10px 12px 0 var(--land-near); }
-/* --drift is the scroll parallax (motion.js); kept off transform so the hover zoom keeps its own transition */
-.frame__img img { width: 100%; height: 100%; object-fit: cover; filter: var(--dt); translate: var(--drift, 0) 0; transform: scale(1.08); transition: filter var(--t-base), transform 1.4s var(--ease); }
-.frame button:hover .frame__img img, .frame button:focus-visible .frame__img img { filter: none; transform: scale(1); }
+/* scale and the scroll parallax are GSAP's (motion.js proofReel), so hover only drops the duotone */
+.frame__img img { width: 100%; height: 100%; object-fit: cover; filter: var(--dt); will-change: transform; transition: filter var(--t-base); }
+.frame button:hover .frame__img img, .frame button:focus-visible .frame__img img { filter: none; }
 .frame__no { position: absolute; top: .8rem; left: .8rem; padding: .3rem .5rem; border-radius: var(--radius); font: 900 1rem/1 var(--font-display); background: var(--fg); color: var(--kicker); }
 .frame__meta { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-top: 1.3rem; padding-top: .8rem; border-top: 1px solid var(--rule); }
 .frame__meta h3 { font: 800 1.6rem/1.05 var(--font-display); letter-spacing: -.015em; }

@@ -37,6 +37,7 @@
   font-size: clamp(5rem, 2rem + 12vw, 15rem); line-height: 1; white-space: nowrap; pointer-events: none;
 }
 .hero__word em { color: var(--sun); }
+@media (max-width: 759px) { .hero:not(.has-3d) .hero__word em { -webkit-text-stroke: 3px var(--ink, #1d142c); paint-order: stroke fill; } }
 .hero.has-3d .hero__word { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 
 /* ---------- description + actions ---------- */

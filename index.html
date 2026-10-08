@@ -6,10 +6,24 @@
   <title>Hicham Hebaz | Marketing strategist & social media designer</title>
   <meta name="description" content="Marketing strategist and social media designer in Rabat. Campaigns, posts and ads in Darija, French and English that people stop for.">
   <meta name="theme-color" content="#fdc82f">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..900&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&family=Noto+Sans+Tifinagh&display=swap" rel="stylesheet">
   <link rel="preload" as="image" href="assets/img/mascot-cutout.webp" fetchpriority="high">
+  <link rel="modulepreload" href="js/render.js">
+  <link rel="modulepreload" href="js/data.js">
+  <link rel="modulepreload" href="js/elements.js">
+  <link rel="modulepreload" href="js/seams.js">
+  <link rel="modulepreload" href="js/seam-art.js">
+  <link rel="modulepreload" href="js/ambient.js">
+  <link rel="modulepreload" href="js/ambient-art.js">
+  <link rel="modulepreload" href="js/film-props.js">
+  <link rel="modulepreload" href="js/carousel.js">
+  <link rel="modulepreload" href="js/ui.js">
+  <link rel="modulepreload" href="js/motion.js">
+  <link rel="modulepreload" href="js/hud.js">
+  <link rel="modulepreload" href="js/timing.js">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/scenery.css">
@@ -26,7 +40,6 @@
 <body class="is-loading">
   <svg class="sr-only" aria-hidden="true">
     <defs>
-      <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .6 0"/></filter>
       <!-- wash grades: luminance mapped onto each scene's tritone (ink -> wash -> cream) -->
       <filter id="dt-amber" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="table" tableValues=".114 .992 .996"/><feFuncG type="table" tableValues=".078 .71 .996"/><feFuncB type="table" tableValues=".173 .169 .796"/></feComponentTransfer></filter>
       <filter id="dt-magenta" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="table" tableValues=".173 .914 1"/><feFuncG type="table" tableValues=".027 .318 .945"/><feFuncB type="table" tableValues=".176 .773 .788"/></feComponentTransfer></filter>
@@ -350,8 +363,8 @@
     </div>
   </dialog>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script type="module" src="js/app.js"></script>
 </body>
 </html>

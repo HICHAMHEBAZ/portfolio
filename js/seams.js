@@ -5,7 +5,7 @@
 // Every seam lands on the next chapter's sky, so the wash changes under the dust.
 import { buildSeam, seamSky } from './seam-art.js';
 
-const BOIL_FPS = 8;
+const BOIL_FPS = 6;
 
 export function mountSeams(root = document) {
   root.querySelectorAll('[data-seam]').forEach((seam) => {
@@ -21,16 +21,18 @@ export function mountSeams(root = document) {
   });
 }
 
-// the ink line re-draws itself 8 times a second, only while a seam is on screen
+// the ink line re-draws itself 6 times a second, only in seams on screen; touch devices keep the static filter
 function startBoil() {
-  const noises = document.querySelectorAll('.boil-noise');
-  if (!noises.length) return;
+  if (window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!document.querySelector('.boil-noise')) return;
   const visible = new Set();
   let timer = null;
   let seed = 1;
   const tick = () => {
     seed = (seed % 6) + 1;
-    noises.forEach((n) => n.setAttribute('seed', String(seed)));
+    visible.forEach((seam) => {
+      seam.querySelectorAll('.boil-noise').forEach((n) => n.setAttribute('seed', String(seed)));
+    });
   };
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => (e.isIntersecting ? visible.add(e.target) : visible.delete(e.target)));

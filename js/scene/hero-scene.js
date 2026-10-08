@@ -23,12 +23,12 @@ function supportsWebGL() {
   }
 }
 
-function createLights(scene) {
+function createLights(scene, mobile) {
   // backlight from the bright sky behind the ridge: rims on the rocks,
   // and the figure's shadow runs down the slope toward the camera
   const key = new THREE.DirectionalLight('#fefecb', 2.6);
   key.castShadow = true;
-  key.shadow.mapSize.set(2048, 2048);
+  key.shadow.mapSize.set(mobile ? 1024 : 2048, mobile ? 1024 : 2048);
   Object.assign(key.shadow.camera, { left: -14, right: 14, top: 10, bottom: -10, near: 1, far: 60 });
   key.shadow.bias = -0.0006;
   key.shadow.normalBias = 0.03;
@@ -41,9 +41,11 @@ function createLights(scene) {
 export async function initHeroScene(container, { mascotUrl } = {}) {
   if (!container || !supportsWebGL()) return null;
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
-  // supersample on 1x screens so the cutout stays crisp; cap at 2x for the GPU
-  renderer.setPixelRatio(Math.min(Math.max(window.devicePixelRatio, 1.5), 2));
+  const mobile = window.innerWidth < 760;
+  const renderer = new THREE.WebGLRenderer({ antialias: window.devicePixelRatio < 2, powerPreference: 'high-performance' });
+  // supersample on 1x screens so the cutout stays crisp; cap the GPU load on phones and 2x screens
+  const dpr = window.devicePixelRatio;
+  renderer.setPixelRatio(mobile ? Math.min(dpr, 1.5) : dpr >= 2 ? 1.75 : Math.max(dpr, 1.5));
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.domElement.setAttribute('aria-hidden', 'true');
@@ -55,7 +57,7 @@ export async function initHeroScene(container, { mascotUrl } = {}) {
 
   const sky = createSky();
   scene.add(sky.mesh);
-  const key = createLights(scene);
+  const key = createLights(scene, mobile);
   scene.add(createFarRidges());
 
   const ridge = createRidge();

@@ -48,13 +48,24 @@ export function initCursor() {
   const label = $('#cursor-label');
   if (!finePointer || !cursor) return;
   let x = -100; let y = -100; let cx = x; let cy = y;
-  window.addEventListener('pointermove', (e) => { x = e.clientX; y = e.clientY; }, { passive: true });
+  let running = false;
   const tick = () => {
     cx += (x - cx) * 0.22;
     cy += (y - cy) * 0.22;
     cursor.style.transform = `translate(${cx}px, ${cy}px)`;
+    if (Math.abs(x - cx) + Math.abs(y - cy) < 0.1) {
+      running = false;
+      return;
+    }
     requestAnimationFrame(tick);
   };
+  window.addEventListener('pointermove', (e) => {
+    x = e.clientX; y = e.clientY;
+    if (!running) {
+      running = true;
+      requestAnimationFrame(tick);
+    }
+  }, { passive: true });
   tick();
   document.addEventListener('pointerover', (e) => {
     const target = e.target.closest('[data-cursor]');

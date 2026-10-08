@@ -1,6 +1,7 @@
 // All page content lives here. Edit text and images in this file only.
 export const IMG = 'assets/img/';
 export const imgPath = (file) => IMG + file;
+export const thumbPath = (file) => IMG + 'thumb/' + file;
 
 const PROFILE_LINKEDIN_ACTIVITY = 'https://www.linkedin.com/in/hicham-hebaz/recent-activity/all/';
 

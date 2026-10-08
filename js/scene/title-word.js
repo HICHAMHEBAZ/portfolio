@@ -16,6 +16,10 @@ function paint(text) {
   ctx.font = FONT;
   ctx.textBaseline = 'alphabetic';
   // a flat cel fill in the wash's cream light: no glow, no gradient inside the shape
+  ctx.lineJoin = 'round';
+  ctx.strokeStyle = '#1d142c';
+  ctx.lineWidth = 14;
+  ctx.strokeText(text, PAD, h - 110);
   ctx.fillStyle = '#fefecb';
   ctx.fillText(text, PAD, h - 110);
   return { canvas, aspect: w / h };

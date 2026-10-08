@@ -39,21 +39,38 @@ function coldOpen(gsap) {
   } catch {
     // storage blocked: play the full open
   }
-  const tl = gsap.timeline({ defaults: { ease: EASE }, onComplete: finishIntro });
+  const skipEvents = ['wheel', 'touchstart', 'keydown'];
+  const skip = () => tl.progress(1);
+  const tl = gsap.timeline({
+    defaults: { ease: EASE },
+    onComplete: () => {
+      skipEvents.forEach((ev) => window.removeEventListener(ev, skip));
+      finishIntro();
+    },
+  });
   if (!seen) {
-    tl.to('[data-line="1"]', { opacity: 1, filter: 'blur(0px)', duration: 0.9, startAt: { filter: 'blur(8px)' } })
-      .to('[data-line="1"]', { opacity: 0, duration: 0.5 }, '+=0.7')
-      .to('[data-line="2"]', { opacity: 1, filter: 'blur(0px)', duration: 0.9, startAt: { filter: 'blur(8px)' } })
-      .to('[data-line="2"]', { opacity: 0, duration: 0.5 }, '+=0.8');
+    tl.to('[data-line="1"]', { opacity: 1, filter: 'blur(0px)', duration: 0.6, startAt: { filter: 'blur(8px)' } })
+      .to('[data-line="1"]', { opacity: 0, duration: 0.35 }, '+=0.45')
+      .to('[data-line="2"]', { opacity: 1, filter: 'blur(0px)', duration: 0.6, startAt: { filter: 'blur(8px)' } })
+      .to('[data-line="2"]', { opacity: 0, duration: 0.35 }, '+=0.45');
   }
-  tl.to('.intro__bar--top', { yPercent: -100, duration: 1.4, ease: 'expo.inOut' })
-    .to('.intro__bar--bottom', { yPercent: 100, duration: 1.4, ease: 'expo.inOut' }, '<')
+  tl.to('.intro__bar--top', { yPercent: -100, duration: 1.0, ease: 'expo.inOut' })
+    .to('.intro__bar--bottom', { yPercent: 100, duration: 1.0, ease: 'expo.inOut' }, '<')
     .to('.intro__skip', { opacity: 0, duration: 0.3 }, '<')
     .from('.nav', { opacity: 0, duration: 0.8 }, '-=.7');
 
-  document.getElementById('intro-skip')?.addEventListener('click', () => tl.progress(1));
+  document.getElementById('intro-skip')?.addEventListener('click', skip);
+  skipEvents.forEach((ev) => window.addEventListener(ev, skip, { once: true, passive: true }));
   // never hold the page hostage on slow or throttled devices
-  setTimeout(() => { if (tl.progress() < 1) tl.progress(1); }, seen ? 3000 : 7000);
+  setTimeout(() => { if (tl.progress() < 1) tl.progress(1); }, seen ? 2500 : 4000);
+}
+
+// infinite CSS loops (seams, caravan, credits, CTA, noise) only run while their section is near the viewport
+function pauseOffscreen() {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => e.target.classList.toggle('is-live', e.isIntersecting));
+  }, { rootMargin: '10% 0px' });
+  document.querySelectorAll('.seam, .caravan-band, .reel-credits, .cta, .noise').forEach((n) => io.observe(n));
 }
 
 // setup -> action: the numeral scales in, then the headline rises 34px word by word
@@ -102,8 +119,8 @@ function noise(gsap) {
   lines.forEach((line, i) => {
     if (i === 0) return;
     const at = i * 0.95;
-    tl.to(lines[i - 1], { opacity: 0, y: -30, filter: 'blur(10px)', duration: 0.45 }, at)
-      .fromTo(line, { opacity: 0, y: 30, filter: 'blur(10px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.45 }, at + 0.2);
+    tl.to(lines[i - 1], { opacity: 0, y: -40, duration: 0.45 }, at)
+      .fromTo(line, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.45 }, at + 0.2);
   });
 }
 
@@ -145,8 +162,8 @@ function proofReel(gsap, mm) {
       },
     });
     gsap.utils.toArray('.frame__img img').forEach((im) => {
-      gsap.fromTo(im, { '--drift': '-6%' }, {
-        '--drift': '6%', ease: 'none',
+      gsap.fromTo(im, { xPercent: -6, scale: 1.08 }, {
+        xPercent: 6, scale: 1.08, ease: 'none',
         scrollTrigger: { trigger: im, containerAnimation: tween, start: 'left right', end: 'right left', scrub: true },
       });
     });
@@ -280,6 +297,7 @@ export function initMotion({ hero } = {}) {
   landscapes(gsap, mm);
   notes(gsap);
   initSeams(gsap);
+  pauseOffscreen();
   initHud(gsap, ScrollTrigger);
   initAmbient(gsap, ScrollTrigger);
   // matchMedia pins can register out of order; measure them top-to-bottom

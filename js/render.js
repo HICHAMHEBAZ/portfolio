@@ -1,4 +1,4 @@
-import { PROJECTS, SERVICES, PROCESS, FAQ, PROFILE, WRITING, NOISE_SIGNAL, imgPath } from './data.js';
+import { PROJECTS, SERVICES, PROCESS, FAQ, PROFILE, WRITING, NOISE_SIGNAL, imgPath, thumbPath } from './data.js';
 
 export const $ = (sel, root = document) => root.querySelector(sel);
 
@@ -57,7 +57,7 @@ function renderCredits() {
 function renderNoise() {
   const all = PROJECTS.flatMap((p) => p.gallery);
   const cols = [0, 1, 2, 3].map((c) => el('div', { class: 'noise__col', 'data-col': c }, []));
-  all.forEach((file, i) => cols[i % 4].append(img(file, '')));
+  all.forEach((file, i) => cols[i % 4].append(img(file, '', { src: thumbPath(file), width: '240', height: '240' })));
   // repeat each column so it can travel without showing a gap
   cols.forEach((col) => [...col.children].forEach((n) => col.append(n.cloneNode())));
   $('#noise-feed').append(...cols);

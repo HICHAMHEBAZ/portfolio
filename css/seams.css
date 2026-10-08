@@ -26,6 +26,7 @@
 @keyframes twinkle { 50% { opacity: .25; } }
 .seam .wheel { transform-box: view-box; animation: spin .7s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
+.seam:not(.is-live) *, .seam:not(.is-live) *::before, .seam:not(.is-live)::before { animation-play-state: paused; }
 
 /* scenes that follow a seam fade their top edge into the seam's last bank */
 .noise::before, .proof::before {

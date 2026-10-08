@@ -19,7 +19,8 @@ svg { flex: none; }
 .skip:focus { top: 1rem; }
 
 /* film stock: grain + vignette over every scene */
-.grain { position: fixed; inset: -50%; z-index: 90; pointer-events: none; opacity: .2; filter: url(#grain); background: #fff; mix-blend-mode: overlay; animation: grain 0.6s steps(4) infinite; }
+.grain { position: fixed; inset: -50%; z-index: 90; pointer-events: none; opacity: .2; background: url(../assets/img/grain.png) repeat; mix-blend-mode: overlay; will-change: transform; animation: grain 0.6s steps(4) infinite; }
+@media (pointer: coarse) { .grain { mix-blend-mode: normal; opacity: .08; } }
 @keyframes grain { 25% { transform: translate(-2%, 1%); } 50% { transform: translate(1%, -2%); } 75% { transform: translate(2%, 2%); } }
 .vignette { position: fixed; inset: 0; z-index: 89; pointer-events: none; background: radial-gradient(120% 90% at 50% 40%, transparent 55%, rgb(10 4 14 / .38) 100%); }
 
