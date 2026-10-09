@@ -1,6 +1,7 @@
 /* ---------- credits strip (social proof right after the hook) ---------- */
-.reel-credits { display: flex; align-items: center; gap: 2rem; padding: 1.6rem 0 1.6rem var(--gutter); background: var(--night); overflow: hidden; border-bottom: 1px solid var(--line-soft); }
-.reel-credits__label { flex: none; margin: 0; font-size: .7rem; letter-spacing: .22em; text-transform: uppercase; color: var(--bone-dim); }
+.reel-credits { display: flex; align-items: center; gap: 1rem; padding: 1.6rem 0; background: var(--night); overflow: hidden; border-bottom: 1px solid var(--line-soft); }
+.reel-credits__label { position: relative; z-index: 2; flex: none; margin: 0; padding: 1.1rem 1.5rem 1.1rem var(--gutter); background: var(--night); font-size: .7rem; letter-spacing: .22em; text-transform: uppercase; color: var(--bone-dim); }
+.reel-credits__label::after { content: ''; position: absolute; left: 100%; top: 0; bottom: 0; width: 2.5rem; background: linear-gradient(90deg, var(--night), transparent); pointer-events: none; }
 .reel-credits__track { display: flex; gap: 3.5rem; width: max-content; animation: crawl 50s linear infinite; }
 .reel-credits__track span { font: italic 700 clamp(1.3rem, 2.2vw, 1.85rem) var(--font-display); white-space: nowrap; color: var(--bone); opacity: .85; }
 .reel-credits__track span small { font: 400 .72rem var(--font-body); letter-spacing: .14em; text-transform: uppercase; color: var(--bone-dim); margin-left: .7rem; font-style: normal; }
