@@ -26,9 +26,33 @@ function splitWords(node) {
   }));
 }
 
-function finishIntro() {
+// the page is released (scroll, 3D opening shot) the moment the bars start to part;
+// the bars themselves are removed once they are off screen
+let released = false;
+function releaseIntro() {
+  if (released) return;
+  released = true;
   document.body.classList.remove('is-loading');
+  document.dispatchEvent(new Event('intro:done'));
+}
+
+function finishIntro() {
+  releaseIntro();
   document.getElementById('intro')?.remove();
+}
+
+// Ch. 01 copy enters as the bars part: setup (kicker) -> action (the two quote
+// lines rise out of their masks) -> resolution (subtitles, actions, credits).
+// One direction, expo-out, stagger budget under 600ms.
+function heroEntrance(gsap, tl, at) {
+  const mobile = window.innerWidth < 761;
+  tl.fromTo('.hero__slate', { clipPath: 'inset(0% 100% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.9, ease: 'expo.inOut', clearProps: 'clipPath' }, at)
+    .from('.hero__line--a .line > span', { yPercent: 110, duration: 1.1 }, at + 0.15)
+    .from('.hero__line--b .line > span', { yPercent: 110, duration: 1.1 }, at + (mobile ? 0.3 : 0.75))
+    .from('.hero__word', { opacity: 0, y: 40, duration: 1.1 }, at + 0.45)
+    .from('.hero__sub', { opacity: 0, y: 24, duration: 0.65, stagger: 0.09 }, at + 0.9)
+    .from('.hero__ctas .btn', { opacity: 0, y: 24, duration: 0.65, stagger: 0.09, clearProps: 'transform,opacity' }, at + 1.1)
+    .from('.credits-row li', { opacity: 0, y: 12, duration: 0.65, stagger: 0.07 }, at + 1.25);
 }
 
 function coldOpen(gsap) {
@@ -54,15 +78,19 @@ function coldOpen(gsap) {
       .to('[data-line="2"]', { opacity: 1, filter: 'blur(0px)', duration: 0.6, startAt: { filter: 'blur(8px)' } })
       .to('[data-line="2"]', { opacity: 0, duration: 0.35 }, '+=0.45');
   }
-  tl.to('.intro__bar--top', { yPercent: -100, duration: 1.0, ease: 'expo.inOut' })
+  tl.addLabel('bars')
+    .add(releaseIntro, 'bars')
+    .to('.intro__bar--top', { yPercent: -100, duration: 1.0, ease: 'expo.inOut' }, 'bars')
     .to('.intro__bar--bottom', { yPercent: 100, duration: 1.0, ease: 'expo.inOut' }, '<')
     .to('.intro__skip', { opacity: 0, duration: 0.3 }, '<')
-    .from('.nav', { opacity: 0, duration: 0.8 }, '-=.7');
+    .add(() => document.getElementById('intro')?.remove(), 'bars+=1')
+    .from('.nav', { opacity: 0, duration: 0.8 }, 'bars+=.3');
+  heroEntrance(gsap, tl, tl.labels.bars + 0.2);
 
   document.getElementById('intro-skip')?.addEventListener('click', skip);
   skipEvents.forEach((ev) => window.addEventListener(ev, skip, { once: true, passive: true }));
   // never hold the page hostage on slow or throttled devices
-  setTimeout(() => { if (tl.progress() < 1) tl.progress(1); }, seen ? 2500 : 4000);
+  setTimeout(() => { if (!released) tl.progress(1); }, seen ? 2500 : 4000);
 }
 
 // infinite CSS loops (seams, caravan, credits, CTA, noise) only run while their section is near the viewport

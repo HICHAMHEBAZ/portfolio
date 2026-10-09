@@ -1,18 +1,26 @@
 import * as THREE from 'three';
 import { createSky, HAZE_COLOR } from './sky.js';
-import { createRidge, createFarRidges, createForeground, moundHeight } from './terrain.js';
-import { createDust, createBirds } from './atmosphere.js';
+import { createNearDune, createMidDunes, createFarRidges, createForeground, moundHeight } from './dunes.js';
+import { createDust, createBirds, createSand } from './atmosphere.js';
+import { createCaravan } from './caravan.js';
 import { createMascot } from './mascot-rig.js';
 import { createBehavior } from './mascot-behavior.js';
 import { createTitleWord } from './title-word.js';
+import { sample, lerp, NOD_AT, SHOT_LENGTH } from './shot.js';
 
+// CH 01, the opening shot. The intro bars part on a dim wide frame; the ringed
+// sun climbs behind the graduate, the camera travels in, he steps out of
+// silhouette, "Stories" rises out of the dunes and he gives a nod. Then the
+// desert keeps breathing: sand in gusts, a caravan on the far crest, birds.
 const MOBILE_BREAKPOINT = 760;
 const SOURCE_HEIGHT = 8.4; // rig is built at this height, then scaled
 const FIGURE_HEIGHT = { desktop: 4.6, mobile: 3.4 };
-const RIDGE_Y = -3.2;
-const RIDGE_Z = -2;
-// the title word stands between the far ridges (z -32 and -48)
-const WORD_Z = -40;
+const DUNE = { y: -3.2, z: -2 };
+const MID = { x: 0, y: -3.6, z: -16 };
+const WORD_Z = -40; // between the far ridges (z -32 and -48)
+const LIT = new THREE.Color('#f0d9bf'); // warm grade so the figure sits inside the light
+const SILHOUETTE = new THREE.Color('#3a2740');
+const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function supportsWebGL() {
   try {
@@ -24,24 +32,33 @@ function supportsWebGL() {
 }
 
 function createLights(scene, mobile) {
-  // backlight from the bright sky behind the ridge: rims on the rocks,
-  // and the figure's shadow runs down the slope toward the camera
-  const key = new THREE.DirectionalLight('#fefecb', 2.6);
+  // backlight from the sun behind him: the crests catch it, the dune faces fall
+  // into the ink band and his shadow runs down the slope toward the lens
+  const key = new THREE.DirectionalLight('#fefecb', 2.8);
   key.castShadow = true;
   key.shadow.mapSize.set(mobile ? 1024 : 2048, mobile ? 1024 : 2048);
   Object.assign(key.shadow.camera, { left: -14, right: 14, top: 10, bottom: -10, near: 1, far: 60 });
   key.shadow.bias = -0.0006;
   key.shadow.normalBias = 0.03;
-  key.shadow.radius = 5;
+  key.shadow.radius = 4;
   scene.add(key, key.target);
-  scene.add(new THREE.HemisphereLight('#fed66a', '#1d142c', 1.1));
-  return key;
+  // flat ambient (not a hemisphere) so the toon bands stay flat cel fills
+  const fill = new THREE.AmbientLight('#fed66a', 0.9);
+  scene.add(fill);
+  return { key, fill };
+}
+
+// camera framings: where the shot settles, and the wide it starts from
+function framing(mobile) {
+  const rest = mobile ? { x: 0, y: 0.4, z: 13, lookY: -0.6 } : { x: 0, y: 1, z: 13.5, lookY: 1.2 };
+  const wide = { x: rest.x - 1.2, y: rest.y - 1.4, z: rest.z + 11, lookY: rest.lookY + 2.2 };
+  return { rest, wide };
 }
 
 export async function initHeroScene(container, { mascotUrl } = {}) {
   if (!container || !supportsWebGL()) return null;
 
-  const mobile = window.innerWidth < 760;
+  let mobile = window.innerWidth < MOBILE_BREAKPOINT;
   const renderer = new THREE.WebGLRenderer({ antialias: window.devicePixelRatio < 2, powerPreference: 'high-performance' });
   // supersample on 1x screens so the cutout stays crisp; cap the GPU load on phones and 2x screens
   const dpr = window.devicePixelRatio;
@@ -49,30 +66,27 @@ export async function initHeroScene(container, { mascotUrl } = {}) {
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.domElement.setAttribute('aria-hidden', 'true');
-  container.append(renderer.domElement);
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.Fog(HAZE_COLOR, 20, 75);
+  scene.fog = new THREE.Fog(HAZE_COLOR, 18, 70);
   const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 150);
 
   const sky = createSky();
-  scene.add(sky.mesh);
-  const key = createLights(scene, mobile);
-  scene.add(createFarRidges());
-
-  const ridge = createRidge();
-  scene.add(ridge);
+  const { key, fill } = createLights(scene, mobile);
+  const dune = createNearDune();
+  const mid = createMidDunes();
+  mid.position.set(MID.x, MID.y, MID.z);
   const foreground = createForeground();
-  scene.add(foreground);
   const dust = createDust();
-  scene.add(dust.group);
+  const sand = createSand(mobile ? 120 : 220);
   const birds = createBirds();
-  scene.add(birds.mesh);
+  const caravan = createCaravan({ anchor: MID });
+  scene.add(sky.mesh, createFarRidges(), mid, caravan.group, dune, foreground, dust.group, sand.points, birds.mesh);
   const word = await createTitleWord('Stories');
   scene.add(word.mesh);
 
-  let rig;
-  let behavior;
+  let rig = null;
+  let behavior = null;
   try {
     rig = await createMascot(mascotUrl, SOURCE_HEIGHT, renderer);
     behavior = createBehavior(rig);
@@ -80,44 +94,63 @@ export async function initHeroScene(container, { mascotUrl } = {}) {
   } catch (err) {
     console.error('Figure texture failed to load:', err);
   }
+  container.append(renderer.domElement);
 
   const pointer = new THREE.Vector2();
   const smooth = new THREE.Vector2();
   const look = new THREE.Vector3();
-  const head = new THREE.Vector3();
-  const halo = new THREE.Vector3();
-  let figureX = 0;
-  let base = { camX: 0, camY: 1, camZ: 13.5, lookY: 1.2 };
+  const sunAnchor = new THREE.Vector3();
+  const sunScreen = new THREE.Vector3();
+  let frames = framing(mobile);
+  let figureHeight = FIGURE_HEIGHT.desktop;
+  let groundY = DUNE.y + moundHeight(0, 0);
+
+  // the shot clock: null until play(); reduced motion starts on the last frame
+  let shotStart = null;
+  let wantShot = false; // play() was called; the clock starts on the first visible frame
+  let nodded = false;
+  const shotAt = (now) => (reduced ? SHOT_LENGTH : shotStart === null ? 0 : (now - shotStart) / 1000);
+
+  function placeCamera(from, to, k, exit, sx, sy) {
+    camera.position.set(
+      lerp(from.x, to.x, k) + sx * 0.8,
+      lerp(from.y, to.y, k) + sy * 0.35 + exit * 2.6,
+      lerp(from.z, to.z, k) - exit * 1.8,
+    );
+    look.set(0, lerp(from.lookY, to.lookY, k) + exit * 3.4, DUNE.z);
+    camera.lookAt(look);
+  }
 
   function layout() {
     const w = container.clientWidth;
     const h = container.clientHeight;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
-    const mobile = w < MOBILE_BREAKPOINT;
+    mobile = w < MOBILE_BREAKPOINT;
     camera.fov = mobile ? 46 : 32;
     camera.updateProjectionMatrix();
     sky.uniforms.uAspect.value = camera.aspect;
+    frames = framing(mobile);
 
-    // the figure is the subject: dead centre, title lines either side of him
-    figureX = 0;
-    // mobile: the figure holds the upper half of the frame, the copy stacks below him
-    base = mobile ? { camX: 0, camY: 0.4, camZ: 13, lookY: -1.5 } : { camX: 0, camY: 1, camZ: 13.5, lookY: 1.2 };
-    ridge.position.set(figureX, RIDGE_Y, RIDGE_Z);
-    key.position.set(figureX - 6, 12, RIDGE_Z - 14);
-    key.target.position.set(figureX, 0, RIDGE_Z);
+    dune.position.set(0, DUNE.y, DUNE.z);
+    key.position.set(-5, 16, DUNE.z - 12);
+    key.target.position.set(0, 0, DUNE.z);
     foreground.position.x = mobile ? 0 : 0.5;
-    camera.position.set(base.camX, base.camY, base.camZ);
-    word.fit(camera, WORD_Z, mobile ? 0.95 : 0.62, mobile ? -0.5 : 0.6);
 
+    // the word is fitted from the resting frame, centred on a fixed screen height:
+    // desktop between the two HTML lines, mobile high above his cap
+    placeCamera(frames.rest, frames.rest, 1, 0, 0, 0);
+    camera.updateMatrixWorld();
+    word.fit(camera, WORD_Z, mobile ? 0.86 : 0.5, mobile ? 0.68 : 0.06);
+
+    figureHeight = mobile ? FIGURE_HEIGHT.mobile : FIGURE_HEIGHT.desktop;
+    groundY = DUNE.y + moundHeight(0, 0);
     if (rig) {
-      const height = mobile ? FIGURE_HEIGHT.mobile : FIGURE_HEIGHT.desktop;
-      const s = height / SOURCE_HEIGHT;
-      const groundY = RIDGE_Y + moundHeight(0, 0);
-      rig.group.scale.setScalar(s);
-      // feet sink a touch into the rubble
-      rig.group.position.set(figureX, groundY + height / 2 - 0.25, RIDGE_Z + 0.2);
+      rig.group.scale.setScalar(figureHeight / SOURCE_HEIGHT);
+      // feet sink a touch into the sand
+      rig.group.position.set(0, groundY + figureHeight / 2 - 0.25, DUNE.z + 0.2);
     }
+    if (reduced) render(performance.now());
   }
 
   window.addEventListener('pointermove', (e) => {
@@ -126,14 +159,59 @@ export async function initHeroScene(container, { mascotUrl } = {}) {
     behavior?.setPointer(THREE.MathUtils.clamp(pointer.x * 1.1, -1.2, 1.2), pointer.y, performance.now());
   }, { passive: true });
 
+  // he answers a click with a small hop; the cursor tells you he is clickable
+  const figureHit = (clientX, clientY) => {
+    if (!rig) return false;
+    const rect = container.getBoundingClientRect();
+    const top = new THREE.Vector3(0, groundY + figureHeight, DUNE.z).project(camera);
+    const feet = new THREE.Vector3(0, groundY, DUNE.z).project(camera);
+    const x = ((clientX - rect.left) / rect.width) * 2 - 1;
+    const y = -(((clientY - rect.top) / rect.height) * 2 - 1);
+    const halfW = (top.y - feet.y) * 0.22 / camera.aspect;
+    return y < top.y && y > feet.y && Math.abs(x - top.x) < halfW;
+  };
+  renderer.domElement.addEventListener('pointermove', (e) => {
+    renderer.domElement.style.cursor = figureHit(e.clientX, e.clientY) ? 'pointer' : '';
+  });
+  renderer.domElement.addEventListener('click', (e) => {
+    if (figureHit(e.clientX, e.clientY)) behavior?.play('hop', performance.now());
+  });
+
+  function render(now) {
+    const t = reduced ? 0 : now / 1000;
+    const shot = sample(shotAt(now));
+    const exit = THREE.MathUtils.clamp(window.scrollY / Math.max(1, container.clientHeight), 0, 1);
+
+    // camera: dolly in from the wide, a touch of pointer parallax, crane up on the way out
+    placeCamera(frames.wide, frames.rest, shot.dolly, reduced ? 0 : exit, smooth.x, smooth.y);
+
+    // light: pre-dawn rose to noon amber, on the sky and on the dunes
+    sky.uniforms.uTime.value = t;
+    sky.uniforms.uLight.value = shot.light;
+    sky.uniforms.uExit.value = exit;
+    key.intensity = lerp(0.6, 2.8, shot.light);
+    fill.intensity = lerp(0.35, 0.9, shot.light);
+
+    // the sun climbs from behind the crest to sit behind his head
+    sunAnchor.set(0, lerp(groundY - 3, groundY + figureHeight * 0.92, shot.sun), DUNE.z - 0.5).project(camera);
+    sunScreen.copy(sunAnchor);
+    sky.uniforms.uSun.value.set(sunScreen.x * 0.5 + 0.5, sunScreen.y * 0.5 + 0.5);
+    sky.uniforms.uSunR.value = (mobile ? 0.075 : 0.085) * lerp(0.8, 1, shot.sun);
+
+    word.setRise(shot.word);
+    if (rig) {
+      rig.material.color.copy(SILHOUETTE).lerp(LIT, shot.figure);
+    }
+    caravan.update(t, shot.caravan);
+    renderer.render(scene, camera);
+  }
+
   let visible = true;
   let running = !document.hidden;
   new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }).observe(container);
   document.addEventListener('visibilitychange', () => { running = !document.hidden; });
   new ResizeObserver(layout).observe(container);
   layout();
-  // the hero is a still frame: the title word stands fully up, the camera holds
-  word.setRise(1);
 
   let last = performance.now();
   function frame(now) {
@@ -141,28 +219,34 @@ export async function initHeroScene(container, { mascotUrl } = {}) {
     const dt = Math.min((now - last) / 1000, 0.05);
     last = now;
     if (!visible || !running) return;
+    if (wantShot && shotStart === null) shotStart = now;
     const t = now / 1000;
-
-    // only the pointer moves the camera, a touch of depth parallax
     smooth.lerp(pointer, 1 - Math.exp(-dt * 2.5));
-    camera.position.set(base.camX + smooth.x * 0.8, base.camY + smooth.y * 0.35, base.camZ);
-    look.set(figureX, base.lookY, RIDGE_Z);
-    camera.lookAt(look);
-
-    sky.uniforms.uTime.value = t;
-    if (rig) {
-      head.set(figureX, rig.group.position.y + 1.2, RIDGE_Z);
-      halo.copy(head).project(camera);
-      sky.uniforms.uHalo.value.set(halo.x * 0.5 + 0.5, halo.y * 0.5 + 0.5);
-      behavior.update(now, dt);
+    if (shotStart !== null && !nodded && shotAt(now) >= NOD_AT) {
+      nodded = true;
+      behavior?.play('nod', now);
     }
-    dust.update(t);
-    birds.update(t);
-    renderer.render(scene, camera);
+    ambient(t, dt, now);
+    render(now);
   }
-  requestAnimationFrame(frame);
+
+  // the desert's own life, independent of the shot
+  function ambient(t, dt, now) {
+    dust.update(t);
+    sand.update(t, dt);
+    birds.update(t);
+    if (rig) behavior.update(now, dt);
+  }
+  if (reduced) {
+    ambient(0, 0, 0);
+    render(0);
+  } else {
+    requestAnimationFrame(frame);
+  }
 
   return {
+    // roll the opening shot; called once the cold open has cleared the frame
+    play: () => { wantShot = true; },
     nod: () => behavior?.play('nod', performance.now()),
   };
 }

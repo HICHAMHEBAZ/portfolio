@@ -30,20 +30,26 @@ function boot() {
 
 function scheduleHero() {
   if (navigator.connection?.saveData) return;
-  const start = () => (window.requestIdleCallback ? requestIdleCallback(loadHero) : setTimeout(loadHero, 200));
-  if (document.readyState === 'complete') start();
-  else window.addEventListener('load', start, { once: true });
+  // three.js streams in while the cold open plays, so the shot is ready when the bars part
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', loadHero, { once: true });
+  else loadHero();
+}
+
+// the opening shot rolls the moment the cold open clears the frame
+function whenIntroDone(fn) {
+  if (!document.body.classList.contains('is-loading')) fn();
+  else document.addEventListener('intro:done', fn, { once: true });
 }
 
 async function loadHero() {
   const container = $('#hero-canvas');
   try {
-    // three.js is only fetched once the page content is up
     const { initHeroScene } = await import('./scene/hero-scene.js');
     heroApi = await initHeroScene(container, { mascotUrl: 'assets/img/mascot-cutout.webp' });
     if (heroApi) {
       container.classList.add('is-live');
       container.closest('.hero')?.classList.add('has-3d');
+      whenIntroDone(heroApi.play);
     }
   } catch (err) {
     console.error('3D hero failed, keeping the static mascot:', err);

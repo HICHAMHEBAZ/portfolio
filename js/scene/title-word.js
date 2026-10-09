@@ -41,15 +41,22 @@ export async function createTitleWord(text) {
 
   const state = { height: 1, baseY: 0, rise: 0 };
 
-  // fit the word to a share of the frame width at its depth
-  function fit(camera, z, widthShare, baseY) {
+  const ray = new THREE.Raycaster();
+  const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+  const hit = new THREE.Vector3();
+
+  // fit the word to a share of the frame width at its depth, its centre on a
+  // screen height (ndcY) so the HTML lines either side can never collide with it
+  function fit(camera, z, widthShare, ndcY) {
     const dist = camera.position.z - z;
     const viewH = 2 * dist * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
     const viewW = viewH * camera.aspect;
     state.height = Math.min((viewW * widthShare) / aspect, viewH * 0.42);
-    state.baseY = baseY;
+    plane.constant = -z;
+    ray.setFromCamera(new THREE.Vector2(0, ndcY), camera);
+    state.baseY = ray.ray.intersectPlane(plane, hit) ? hit.y - state.height * 0.5 : 0;
     mesh.scale.set(state.height, state.height, 1);
-    mesh.position.z = z;
+    mesh.position.set(hit.x, 0, z);
     apply();
   }
 
