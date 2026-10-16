@@ -178,10 +178,13 @@ export const FAQ = [
   { q: 'Do you only design, or plan as well?', a: 'Both. I have a master\'s in strategic marketing, so I can take a project from research to the last post.' },
 ];
 
-// Ch. 05: two content workflows, each a numbered pipeline built after watching the task first
+// Ch. 05: the making-of. Two content workflows, each an editing bay: the field notes I took
+// while watching the task by hand (the noise), then the pipeline that replaced it, beat by beat.
 export const WORKFLOWS = [
   {
-    id: 'explainer', grade: 'road', prop: 'film', slate: 'Workflow 1', kind: 'Explainer video',
+    id: 'explainer', grade: 'road', device: 'phone', slate: 'Bay 1', kind: 'Explainer video',
+    counter: { label: 'Runtime', total: 60 },
+    notes: ['09:40 · script, version 4', '11:15 · who owns this clip?', '13:05 · "can it feel more local?"', '15:30 · footage still missing', '17:50 · export_final_v3.mp4'],
     headline: 'A 60-second explainer, without the week of back-and-forth.', accent: 'week',
     observed: 'I followed how short explainer reels get made: a script passed between people, hours lost hunting footage and checking who owns it, then rounds of edits nobody could trace. Most of the time went into the same steps, done by hand, every time.',
     steps: [
@@ -199,7 +202,9 @@ export const WORKFLOWS = [
     ],
   },
   {
-    id: 'carousel', grade: 'jungle', prop: 'slides', slate: 'Workflow 2', kind: 'Carousel',
+    id: 'carousel', grade: 'jungle', device: 'slide', slate: 'Bay 2', kind: 'Carousel',
+    counter: { label: 'Slide', total: 9 },
+    notes: ['Mon · same template again', 'Tue · cover rewritten twice', 'Wed · "looks like last week"', 'Thu · typo found after export', 'Fri · "who picked this colour?"'],
     headline: 'Carousels that never look like last week\'s post.', accent: 'last',
     observed: 'I watched carousels get made from zero every time, or copied from the last one until the feed looked the same. Decisions were made for the client instead of with them, and fixes came after the export.',
     steps: [

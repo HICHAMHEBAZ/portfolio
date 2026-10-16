@@ -255,13 +255,22 @@ function landscapes(gsap, mm) {
   gsap.from('.path', { y: 34, opacity: 0, duration: 0.65, ease: EASE, stagger: 0.09, clearProps: 'transform,opacity', scrollTrigger: { trigger: '.paths', start: 'top 85%' } });
 }
 
-// Ch. 05: each pipeline step lights as it reaches the reading line, and dims again on the way back
-function workflows(gsap, ScrollTrigger) {
-  gsap.utils.toArray('.flow__step').forEach((step) => {
-    ScrollTrigger.create({
-      trigger: step, start: 'top 78%',
-      onEnter: () => step.classList.add('is-lit'),
-      onLeaveBack: () => step.classList.remove('is-lit'),
+// Ch. 05: the bays' beats are state-driven (workflows.js); motion here is the camera:
+// the device's frame opens like the case media, and the field notes drift on their own depth
+function bays(gsap) {
+  gsap.utils.toArray('.bay').forEach((bay) => {
+    const frame = bay.querySelector('.bay__frame');
+    gsap.fromTo(frame, { clipPath: 'inset(14% 8% 14% 8%)' }, {
+      clipPath: 'inset(0% 0% 0% 0%)', duration: 1.4, ease: 'expo.inOut',
+      scrollTrigger: { trigger: bay, start: 'top 70%' },
+      onComplete: () => gsap.set(frame, { clearProps: 'clipPath' }),
+    });
+    gsap.fromTo(bay.querySelector('.bay__notes'), { y: 40 }, {
+      y: -40, ease: 'none', scrollTrigger: { trigger: bay, start: 'top bottom', end: 'center top', scrub: true },
+    });
+    gsap.from(bay.querySelectorAll('.bay__agency li'), {
+      opacity: 0, y: 34, duration: 0.65, ease: EASE, stagger: 0.09,
+      scrollTrigger: { trigger: bay.querySelector('.bay__agency'), start: 'top 85%' },
     });
   });
 }
@@ -320,7 +329,7 @@ export function initMotion({ hero } = {}) {
   if (!gsap || !ScrollTrigger || reduced) {
     if (!gsap) console.warn('GSAP failed to load; showing the static page.');
     document.documentElement.classList.add('no-motion');
-    document.querySelectorAll('.step, .flow__step').forEach((s) => s.classList.add('is-lit'));
+    document.querySelectorAll('.step').forEach((s) => s.classList.add('is-lit'));
     finishIntro();
     return;
   }
@@ -334,7 +343,7 @@ export function initMotion({ hero } = {}) {
   proofReel(gsap, mm);
   scenes(gsap);
   landscapes(gsap, mm);
-  workflows(gsap, ScrollTrigger);
+  bays(gsap);
   notes(gsap);
   initSeams(gsap);
   pauseOffscreen();

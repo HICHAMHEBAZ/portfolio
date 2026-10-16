@@ -35,10 +35,22 @@ export const SEAMS = {
     banks: [['#b335a7', '#7a2a86'], ['#18482d', '#0f2f1d'], ['#4cce3e', '#24944e'], ['#fdfdb5', '#d9f7a0']],
     sun: 'eclipse', birds: '#08100b',
   },
-  // method (magenta) -> the notes (tent indigo): night falls on the caravan
+  // method (magenta) -> the making-of (road blue): the pickup drives into the edit bay's daylight
+  bay: {
+    sky: ['#e951c5', '#4fc8ea'], ink: '#0c2a5e',
+    banks: [['#f7936d', '#e951c5'], ['#b335a7', '#7a2a86'], ['#1ca9e4', '#0c57ae'], ['#4fc8ea', '#1ca9e4']],
+    birds: '#2c072d', rider: 'truck',
+  },
+  // bay 1 (road blue) -> bay 2 (night green): the splice, under the black sun
+  splice: {
+    sky: ['#1590d6', '#8bdc58'], ink: '#08100b',
+    banks: [['#4fc8ea', '#1ca9e4'], ['#0c57ae', '#0c2a5e'], ['#4cce3e', '#24944e'], ['#fdfdb5', '#d9f7a0']],
+    sun: 'eclipse', birds: '#08100b',
+  },
+  // the making-of (night green) -> the notes (tent indigo): night falls on the caravan
   night: {
-    sky: ['#a0187c', '#312c70'], ink: '#070120',
-    banks: [['#b335a7', '#7a2a86'], ['#5a1f5e', '#3a1450'], ['#312c70', '#2e2e7b'], ['#4a4e99', '#2e2e7b']],
+    sky: ['#24944e', '#312c70'], ink: '#070120',
+    banks: [['#4cce3e', '#24944e'], ['#18482d', '#08100b'], ['#312c70', '#2e2e7b'], ['#4a4e99', '#2e2e7b']],
     stars: true, sun: 'moon', rider: 'caravan',
   },
   // faq (amber) -> the finale (eclipse): the day burns down to violet
