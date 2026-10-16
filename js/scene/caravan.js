@@ -14,7 +14,7 @@ function limb(ctx, x, y, angle, len) {
   ctx.stroke();
 }
 
-function drawCamel(frame) {
+export function drawCamel(frame) {
   const canvas = document.createElement('canvas');
   canvas.width = W;
   canvas.height = H;

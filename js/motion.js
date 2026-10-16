@@ -255,23 +255,12 @@ function landscapes(gsap, mm) {
   gsap.from('.path', { y: 34, opacity: 0, duration: 0.65, ease: EASE, stagger: 0.09, clearProps: 'transform,opacity', scrollTrigger: { trigger: '.paths', start: 'top 85%' } });
 }
 
-// Ch. 05: the bays' beats are state-driven (workflows.js); motion here is the camera:
-// the device's frame opens like the case media, and the field notes drift on their own depth
-function bays(gsap) {
-  gsap.utils.toArray('.bay').forEach((bay) => {
-    const frame = bay.querySelector('.bay__frame');
-    gsap.fromTo(frame, { clipPath: 'inset(14% 8% 14% 8%)' }, {
-      clipPath: 'inset(0% 0% 0% 0%)', duration: 1.4, ease: 'expo.inOut',
-      scrollTrigger: { trigger: bay, start: 'top 70%' },
-      onComplete: () => gsap.set(frame, { clearProps: 'clipPath' }),
-    });
-    gsap.fromTo(bay.querySelector('.bay__notes'), { y: 40 }, {
-      y: -40, ease: 'none', scrollTrigger: { trigger: bay, start: 'top bottom', end: 'center top', scrub: true },
-    });
-    gsap.from(bay.querySelectorAll('.bay__agency li'), {
-      opacity: 0, y: 34, duration: 0.65, ease: EASE, stagger: 0.09,
-      scrollTrigger: { trigger: bay.querySelector('.bay__agency'), start: 'top 85%' },
-    });
+// Ch. 05: the tracking shot is scroll-driven by workflows.js; here only the agency credits
+// under it arrive on the 90ms stagger
+function makingOf(gsap) {
+  gsap.from('.after__bay li, .after__close', {
+    opacity: 0, y: 34, duration: 0.65, ease: EASE, stagger: 0.09, clearProps: 'transform,opacity',
+    scrollTrigger: { trigger: '.mk__after', start: 'top 80%' },
   });
 }
 
@@ -343,7 +332,7 @@ export function initMotion({ hero } = {}) {
   proofReel(gsap, mm);
   scenes(gsap);
   landscapes(gsap, mm);
-  bays(gsap);
+  makingOf(gsap);
   notes(gsap);
   initSeams(gsap);
   pauseOffscreen();
