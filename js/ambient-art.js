@@ -73,7 +73,7 @@ export function trail() {
   return '<svg viewBox="0 0 1000 14" preserveAspectRatio="none"><path d="M0 3 H1000"/><path d="M0 11 H1000"/></svg>';
 }
 
-// ---------- Ch. 05: tent indigo, the night circle ----------
+// ---------- Ch. 06: tent indigo, the night circle ----------
 function stars(seed, n, h = 600) {
   const rnd = rng(seed);
   const dots = Array.from({ length: n }, () => `<circle class="tw" style="${vars({ d: sec(3 + rnd() * 4), dl: sec(-rnd() * 6) })}" cx="${(rnd() * 1000).toFixed(0)}" cy="${(rnd() * h).toFixed(0)}" r="${(0.6 + rnd() * 1.4).toFixed(1)}"/>`).join('');
@@ -84,13 +84,13 @@ export const tentNight = () => `
   ${stars(61, 40, 340)}
   ${land(17, { far: 170, near: 236, props: `${tent(1160, 214, 220)}${sitter(1010, 236, 70)}${sitter(1300, 236, 64, true)}` })}`;
 
-// ---------- Ch. 06: amber noon ----------
+// ---------- Ch. 07: amber noon ----------
 export const noon = () => `
   ${sun(78, 10, 'clamp(90px, 11vw, 170px)')}
   ${haze([[-8, 62, '40vw', '14vw', 'haze-2']])}
   ${land(23, { far: 170, near: 238, props: acacia(220, 186, 150) })}`;
 
-// ---------- Ch. 07: one figure resting on a mound ----------
+// ---------- Ch. 08: one figure resting on a mound ----------
 export const rest = () => `
   ${haze([[66, 50, '36vw', '14vw']])}
   ${land(31, {
@@ -98,7 +98,7 @@ export const rest = () => `
     front: `<path class="s-land__near" d="${moundPath(37, 1220, 150, 140)}"/>${figure(1220, 158, 150, { lean: 2 })}`,
   })}`;
 
-// ---------- Ch. 08: the finale ----------
+// ---------- Ch. 09: the finale ----------
 // ⵣ (yaz), the Amazigh sign from the logo, drawn as a constellation
 const YAZ = [[0, -70], [0, 70], [-46, -70], [-30, -36], [0, -24], [30, -36], [46, -70], [-46, 70], [-30, 36], [0, 24], [30, 36], [46, 70]];
 const YAZ_PATH = 'M0 -70 L0 70 M-46 -70 L-30 -36 L0 -24 L30 -36 L46 -70 M-46 70 L-30 36 L0 24 L30 36 L46 70';

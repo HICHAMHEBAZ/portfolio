@@ -1,4 +1,4 @@
-// Corner chrome, as on the carousel slides: the chapter counter ("03 / 08")
+// Corner chrome, as on the carousel slides: the chapter counter ("03 / 09")
 // and the chapter's name, rolled like a split-flap when a new chapter arrives.
 export function initHud(gsap, ScrollTrigger) {
   const hud = document.getElementById('hud');

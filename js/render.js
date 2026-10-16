@@ -15,7 +15,7 @@ export function el(tag, props = {}, children = []) {
   return node;
 }
 
-const svgUse = (id) => {
+export const svgUse = (id) => {
   const NS = 'http://www.w3.org/2000/svg';
   const svg = document.createElementNS(NS, 'svg');
   const use = document.createElementNS(NS, 'use');
@@ -138,7 +138,7 @@ function renderServices() {
   ])));
 }
 
-// Ch. 05: each subject is a cassette on the shelf; the reels turn with the scroll
+// Ch. 06: each subject is a cassette on the shelf; the reels turn with the scroll
 const reel = () => el('span', { class: 'tape__reel' }, [el('i')]);
 
 function renderWriting() {

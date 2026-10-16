@@ -60,7 +60,7 @@
 .yaz__star { fill: var(--paper); animation: tw 3s var(--ease-ambient) infinite alternate; }
 .yaz__star:nth-child(odd) { animation-delay: -1.4s; }
 
-/* ---------- Ch. 08: the flock crosses the ringed sun, under the forms ---------- */
+/* ---------- Ch. 09: the flock crosses the ringed sun, under the forms ---------- */
 .flock { position: absolute; left: 6%; bottom: clamp(150px, 20vw, 300px); width: clamp(180px, 24vw, 340px); }
 .flock svg { width: 100%; height: auto; overflow: visible; }
 .flock .bird { transform-box: fill-box; transform-origin: center; animation: flap .42s ease-in-out infinite alternate; }

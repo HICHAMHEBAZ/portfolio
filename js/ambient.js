@@ -82,14 +82,14 @@ function tracks(gsap, ScrollTrigger, mm) {
   });
 }
 
-// Ch. 05: the lamp in the tent door flickers up as the circle comes into view
+// Ch. 06: the lamp in the tent door flickers up as the circle comes into view
 function lamp(gsap) {
   const tentLamp = document.querySelector('.amb--tent .s-lamp');
   if (!tentLamp) return;
   gsap.from(tentLamp, { opacity: 0, duration: 1.4, ease: 'steps(5)', scrollTrigger: { trigger: '.notes', start: 'top 60%' } });
 }
 
-// Ch. 08: the ⵣ is drawn star by star, then the ink disc crosses the sun
+// Ch. 09: the ⵣ is drawn star by star, then the ink disc crosses the sun
 function finale(gsap) {
   const yaz = document.querySelector('.yaz');
   if (yaz) {

@@ -177,3 +177,45 @@ export const FAQ = [
   { q: 'How does a project start?', a: 'Send the form below with what you sell and what you need. I reply with questions, then a plan and a quote.' },
   { q: 'Do you only design, or plan as well?', a: 'Both. I have a master\'s in strategic marketing, so I can take a project from research to the last post.' },
 ];
+
+// Ch. 05: two content workflows, each a numbered pipeline built after watching the task first
+export const WORKFLOWS = [
+  {
+    id: 'explainer', grade: 'road', prop: 'film', slate: 'Workflow 1', kind: 'Explainer video',
+    headline: 'A 60-second explainer, without the week of back-and-forth.', accent: 'week',
+    observed: 'I followed how short explainer reels get made: a script passed between people, hours lost hunting footage and checking who owns it, then rounds of edits nobody could trace. Most of the time went into the same steps, done by hand, every time.',
+    steps: [
+      { title: 'Script with a spine', text: 'Every script follows the same structure: the stakes, the big question, a turn, a rehook. In Darija, in caption-sized chunks.' },
+      { title: 'Shot list, beat by beat', text: 'Each line becomes a beat, and each beat is either real footage or a motion graphic, decided by written rules.' },
+      { title: 'Footage with receipts', text: 'Real footage of the named place, person or document, sourced with its licence logged. No generic stock.' },
+      { title: 'Looks on one board', text: 'Two or three looks per scene, all on one page. The client picks once instead of answering ten emails.' },
+      { title: 'Build, check, assemble', text: 'Scenes are built in the house style, checked against a checklist, then joined into the final cut.' },
+      { title: 'Final cut you can edit', text: 'Captions, speed and order can be changed per clip after the render, without starting over.' },
+    ],
+    agency: [
+      'Your brand rules become the written rules every video follows.',
+      'Your approval steps stay. They just move to one board.',
+      'Every pick is logged, so the next video starts closer to your taste.',
+    ],
+  },
+  {
+    id: 'carousel', grade: 'jungle', prop: 'slides', slate: 'Workflow 2', kind: 'Carousel',
+    headline: 'Carousels that never look like last week\'s post.', accent: 'last',
+    observed: 'I watched carousels get made from zero every time, or copied from the last one until the feed looked the same. Decisions were made for the client instead of with them, and fixes came after the export.',
+    steps: [
+      { title: 'Read the source', text: 'An article, a link or a script. The story is pulled out before anything is designed.' },
+      { title: 'Variants, not guesses', text: 'Two or three options for each decision: format, cover headline, slide outline, colour story, caption.' },
+      { title: 'One click to approve', text: 'The client approves each block on one page. Nothing is built before that.' },
+      { title: 'A new colour story each post', text: 'A rotating colour queue means two posts in a row never share a palette.' },
+      { title: 'Build only what was approved', text: 'Slides are built from a fixed design system, then checked frame by frame.' },
+      { title: 'Ready to post', text: 'A LinkedIn-ready PDF, the caption and the hashtags. Nothing else to chase.' },
+    ],
+    agency: [
+      'Your design system replaces mine. Same pipeline, your look.',
+      'Formats match your client\'s channels and languages.',
+      'Your team approves, the pipeline does the repetitive part.',
+    ],
+  },
+];
+
+export const WORKFLOWS_CLOSE = { text: 'Have a workflow that eats your week? Show me how it runs.', button: 'Map my workflow' };

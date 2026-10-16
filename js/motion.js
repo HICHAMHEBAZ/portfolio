@@ -255,7 +255,18 @@ function landscapes(gsap, mm) {
   gsap.from('.path', { y: 34, opacity: 0, duration: 0.65, ease: EASE, stagger: 0.09, clearProps: 'transform,opacity', scrollTrigger: { trigger: '.paths', start: 'top 85%' } });
 }
 
-// Ch. 05: tapes are dealt onto the shelf, then their reels turn with the scroll
+// Ch. 05: each pipeline step lights as it reaches the reading line, and dims again on the way back
+function workflows(gsap, ScrollTrigger) {
+  gsap.utils.toArray('.flow__step').forEach((step) => {
+    ScrollTrigger.create({
+      trigger: step, start: 'top 78%',
+      onEnter: () => step.classList.add('is-lit'),
+      onLeaveBack: () => step.classList.remove('is-lit'),
+    });
+  });
+}
+
+// Ch. 06: tapes are dealt onto the shelf, then their reels turn with the scroll
 function notes(gsap) {
   gsap.from('.tape', {
     y: 34, opacity: 0, duration: 0.65, ease: EASE, stagger: 0.09, clearProps: 'transform,opacity',
@@ -309,7 +320,7 @@ export function initMotion({ hero } = {}) {
   if (!gsap || !ScrollTrigger || reduced) {
     if (!gsap) console.warn('GSAP failed to load; showing the static page.');
     document.documentElement.classList.add('no-motion');
-    document.querySelectorAll('.step').forEach((s) => s.classList.add('is-lit'));
+    document.querySelectorAll('.step, .flow__step').forEach((s) => s.classList.add('is-lit'));
     finishIntro();
     return;
   }
@@ -323,6 +334,7 @@ export function initMotion({ hero } = {}) {
   proofReel(gsap, mm);
   scenes(gsap);
   landscapes(gsap, mm);
+  workflows(gsap, ScrollTrigger);
   notes(gsap);
   initSeams(gsap);
   pauseOffscreen();
