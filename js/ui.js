@@ -1,6 +1,7 @@
-import { PROJECTS, PROFILE } from './data.js';
+import { PROJECTS, DAILY_PROJECTS, PROFILE } from './data.js';
 import { Carousel } from './carousel.js';
 import { $, slideNodes, el } from './render.js';
+import { showSent } from './confirm.js';
 
 const finePointer = window.matchMedia('(pointer: fine)').matches;
 
@@ -31,13 +32,19 @@ export function initNav() {
   links.forEach((a) => a.addEventListener('click', close));
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
 
+  // the floating button would sit on top of the forms, so it steps aside while #cta is on screen
+  const cta = document.getElementById('cta');
+  if (sticky && cta) {
+    new IntersectionObserver(([entry]) => sticky.classList.toggle('is-away', entry.isIntersecting)).observe(cta);
+  }
+
   const spy = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
       links.forEach((a) => a.classList.toggle('is-active', a.getAttribute('href') === `#${entry.target.id}`));
     });
   }, { rootMargin: '-45% 0px -50% 0px' });
-  ['proof', 'method', 'writing', 'offer', 'faq'].forEach((id) => {
+  ['proof', 'method', 'dailies', 'offer', 'faq', 'writing'].forEach((id) => {
     const s = document.getElementById(id);
     if (s) spy.observe(s);
   });
@@ -80,16 +87,19 @@ export function initLightbox() {
   let opener = null;
 
   const open = (id, startAt = 0) => {
-    const p = PROJECTS.find((x) => x.id === id);
+    // the work reel's projects, then the contact sheet's carousels
+    const p = PROJECTS.find((x) => x.id === id) || DAILY_PROJECTS.find((x) => x.id === id);
     if (!p) return;
     $('#lb-title').textContent = p.title;
-    $('#lb-tag').textContent = `${p.tag} · ${p.year}`;
+    $('#lb-tag').textContent = [p.tag, p.year].filter(Boolean).join(' · ');
     $('#lb-blurb').textContent = p.blurb;
     $('#lb-roles').replaceChildren(...p.role.map((r) => el('li', { text: r })));
     carousel.setSlides(slideNodes(p.gallery, p.title));
     $('#lb-carousel .carousel__ui').hidden = p.gallery.length < 2;
     dialog.showModal();
     requestAnimationFrame(() => carousel.goTo(startAt));
+    // slides have no width until their images arrive, so a start past the first slide waits for them
+    if (startAt) Promise.all([...$('#lb-track').querySelectorAll('img')].map((i) => i.decode().catch(() => {}))).then(() => carousel.goTo(startAt));
     $('#lb-track').focus({ preventScroll: true });
   };
 
@@ -112,7 +122,7 @@ export function initForm() {
 
   // "Ask about this" on a service pre-selects the matching chip
   document.querySelectorAll('[data-service]').forEach((a) => a.addEventListener('click', () => {
-    const map = { 'Social media content': 'Social media content', 'Campaign creative': 'Campaign creative', 'Marketing strategy': 'Marketing strategy', 'Ads that convert': 'Ads' };
+    const map = { 'Social media content': 'Social media content', 'Campaign creative': 'Campaign creative', 'Marketing strategy': 'Marketing strategy', 'Ads that convert': 'Ads', 'Content pipelines': 'Content pipeline' };
     const radio = form.querySelector(`input[value="${map[a.dataset.service]}"]`);
     if (radio) radio.checked = true;
   }));
@@ -140,6 +150,7 @@ export function initForm() {
     error.textContent = '';
     const subject = `Project brief: ${data.type} (${fields.name})`;
     const body = `Name: ${fields.name}\nEmail: ${fields.email}\nNeed: ${data.type}\n\n${fields.message}`;
+    showSent(form.closest('.path'), { title: 'Your brief is ready to send.', subject, body });
     window.location.href = `mailto:${PROFILE.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   });
 }
@@ -171,6 +182,7 @@ export function initAuditForm() {
 
 What I sell:
 `;
+    showSent(form.closest('.path'), { title: 'Your audit request is ready to send.', subject, body, onEdit: () => form.elements.handle.focus() });
     window.location.href = `mailto:${PROFILE.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   });
   form.elements.handle.addEventListener('input', () => {

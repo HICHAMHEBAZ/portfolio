@@ -35,17 +35,17 @@ export const SEAMS = {
     banks: [['#b335a7', '#7a2a86'], ['#18482d', '#0f2f1d'], ['#4cce3e', '#24944e'], ['#fdfdb5', '#d9f7a0']],
     sun: 'eclipse', birds: '#08100b',
   },
-  // method (magenta) -> the making-of (road blue): the pickup drives into the edit bay's daylight
-  bay: {
-    sky: ['#e951c5', '#4fc8ea'], ink: '#0c2a5e',
-    banks: [['#f7936d', '#e951c5'], ['#b335a7', '#7a2a86'], ['#1ca9e4', '#0c57ae'], ['#4fc8ea', '#1ca9e4']],
-    birds: '#2c072d', rider: 'truck',
+  // method (magenta) -> the dailies (indigo): the house lights go down, a moon and stars come up
+  lights: {
+    sky: ['#e951c5', '#2e2e7b'], ink: '#070120',
+    banks: [['#f7936d', '#e951c5'], ['#b335a7', '#7a2a86'], ['#312c70', '#2e2e7b'], ['#4a4e99', '#2e2e7b']],
+    stars: true, sun: 'moon', birds: '#070120',
   },
-  // the making-of (night green) -> the notes (tent indigo): night falls on the caravan
-  night: {
-    sky: ['#8bdc58', '#312c70'], ink: '#070120',
-    banks: [['#4cce3e', '#24944e'], ['#18482d', '#08100b'], ['#312c70', '#2e2e7b'], ['#4a4e99', '#2e2e7b']],
-    stars: true, sun: 'moon', rider: 'caravan',
+  // the dailies (indigo) -> the offer (amber): the screening lets out into morning
+  daybreak: {
+    sky: ['#2e2e7b', '#fdc82f'], ink: '#1d142c',
+    banks: [['#4a4e99', '#2e2e7b'], ['#e951c5', '#b335a7'], ['#fbb070', '#f7936d'], ['#fed66a', '#fdc82f']],
+    sun: 'noon', birds: '#1d142c',
   },
   // faq (amber) -> the finale (eclipse): the day burns down to violet
   dawn: {

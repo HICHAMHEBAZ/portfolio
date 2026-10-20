@@ -7,6 +7,7 @@ import { initSeams } from './seams.js';
 import { initHud } from './hud.js';
 import { initAmbient } from './ambient.js';
 import { PIN } from './timing.js';
+import { dailiesMotion } from './dailies-motion.js';
 
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const EASE = 'expo.out';
@@ -255,16 +256,7 @@ function landscapes(gsap, mm) {
   gsap.from('.path', { y: 34, opacity: 0, duration: 0.65, ease: EASE, stagger: 0.09, clearProps: 'transform,opacity', scrollTrigger: { trigger: '.paths', start: 'top 85%' } });
 }
 
-// Ch. 05: the tracking shot is scroll-driven by workflows.js; here only the agency credits
-// under it arrive on the 90ms stagger
-function makingOf(gsap) {
-  gsap.from('.after__bay li, .after__close', {
-    opacity: 0, y: 34, duration: 0.65, ease: EASE, stagger: 0.09, clearProps: 'transform,opacity',
-    scrollTrigger: { trigger: '.mk__after', start: 'top 80%' },
-  });
-}
-
-// Ch. 06: tapes are dealt onto the shelf, then their reels turn with the scroll
+// Ch. 09: tapes are dealt onto the shelf, then their reels turn with the scroll
 function notes(gsap) {
   gsap.from('.tape', {
     y: 34, opacity: 0, duration: 0.65, ease: EASE, stagger: 0.09, clearProps: 'transform,opacity',
@@ -332,7 +324,7 @@ export function initMotion({ hero } = {}) {
   proofReel(gsap, mm);
   scenes(gsap);
   landscapes(gsap, mm);
-  makingOf(gsap);
+  dailiesMotion(gsap);
   notes(gsap);
   initSeams(gsap);
   pauseOffscreen();

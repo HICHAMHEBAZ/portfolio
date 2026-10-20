@@ -1,5 +1,5 @@
 import { renderAll, oklaImages, $ } from './render.js';
-import { renderWorkflows } from './workflows.js';
+import { renderDailies } from './dailies.js';
 import { mountElements } from './elements.js';
 import { mountSeams } from './seams.js';
 import { mountAmbient } from './ambient.js';
@@ -15,7 +15,7 @@ const hero = {
 
 function boot() {
   renderAll();
-  renderWorkflows();
+  renderDailies();
   mountElements();
   mountSeams();
   mountAmbient();

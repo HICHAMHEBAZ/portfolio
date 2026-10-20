@@ -4,4 +4,6 @@ export const PIN = {
   noise: window.innerWidth < 761 ? '+=120%' : '+=170%',
   // share of the reel's width the visitor scrolls through; under 1 runs the reel faster than the wheel
   proof: 0.7,
+  // the dailies' film strip: scroll distance per pixel of strip travel
+  dailies: 0.85,
 };

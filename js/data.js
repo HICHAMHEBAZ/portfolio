@@ -8,6 +8,8 @@ const PROFILE_LINKEDIN_ACTIVITY = 'https://www.linkedin.com/in/hicham-hebaz/rece
 export const PROFILE = {
   name: 'Hicham Hebaz',
   email: 'hello@yourdomain.com',
+  // international digits, no plus or spaces (e.g. 212600000000); the WhatsApp buttons stay hidden while empty
+  whatsapp: '',
   city: 'Rabat, Morocco',
   linkedin: 'https://www.linkedin.com/in/hicham-hebaz/',
   // paste the profile URLs here; footer links stay hidden while these are empty
@@ -15,7 +17,10 @@ export const PROFILE = {
   behance: '',
 };
 
-// Ch. 05: what I write. Each entry is one "tape" on the shelf.
+// opening line of the WhatsApp chat, shown to the visitor before they send it
+export const WHATSAPP_TEXT = 'Hi Hicham, I saw your portfolio and I would like to talk about a project.';
+
+// Ch. 09: what I write. Each entry is one "tape" on the shelf.
 // LinkedIn posts aren't publicly readable, so these are the subjects I write on;
 // to feature a specific post, paste its link into `url` and its opening line into `hook`.
 export const WRITING = [
@@ -161,6 +166,13 @@ export const SERVICES = [
     deliverables: ['Offer & hook copy', 'Static ad sets', 'A/B variants'],
     fit: 'E-commerce, services, recruitment',
   },
+  {
+    num: '05',
+    title: 'Content pipelines',
+    text: 'I sit with your team while they make a format, then build the pipeline that makes it: script, board, approval, export.',
+    deliverables: ['Workflow map with timings', 'Pipeline set to your brand rules', 'Handover to your team'],
+    fit: 'Agencies, media teams, in-house studios',
+  },
 ];
 
 export const PROCESS = [
@@ -172,55 +184,120 @@ export const PROCESS = [
 ];
 
 export const FAQ = [
-  { q: 'Do you write the captions too?', a: 'Yes. Copy and design come together, in Darija, French or English. Most of my campaigns are written in Darija.' },
-  { q: 'Can you work remotely?', a: 'Yes. I\'m based in Rabat and work with clients anywhere in Morocco and abroad.' },
+  { q: 'What does a project cost?', a: 'It depends on how many posts, which channels and how much strategy. Every quote is written and fixed before work starts. Send the brief and I\'ll reply with questions first, then the quote.' },
   { q: 'How does a project start?', a: 'Send the form below with what you sell and what you need. I reply with questions, then a plan and a quote.' },
+  { q: 'Do you write the captions too?', a: 'Yes. Copy and design come together, in Darija, French or English. Most of my campaigns are written in Darija.' },
   { q: 'Do you only design, or plan as well?', a: 'Both. I have a master\'s in strategic marketing, so I can take a project from research to the last post.' },
+  { q: 'Can you set up a pipeline for my team?', a: 'Yes. I watch how your team makes one format, then build the pipeline around your brand rules and approval steps. The dailies above came out of two of them.' },
+  { q: 'Can you work remotely?', a: 'Yes. I\'m based in Rabat and work with clients anywhere in Morocco and abroad.' },
 ];
 
-// Ch. 05: the making-of. Two content workflows, each an editing bay: the field notes I took
-// while watching the task by hand (the noise), then the pipeline that replaced it, beat by beat.
-export const WORKFLOWS = [
-  {
-    id: 'explainer', grade: 'road', device: 'phone', slate: 'Bay 1', kind: 'Explainer video',
-    counter: { label: 'Runtime', total: 60 },
-    notes: ['09:40 · script, version 4', '11:15 · who owns this clip?', '13:05 · "can it feel more local?"', '15:30 · footage still missing', '17:50 · export_final_v3.mp4'],
-    headline: 'A 60-second explainer, without the week of back-and-forth.', accent: 'week',
-    observed: 'I followed how short explainer reels get made: a script passed between people, hours lost hunting footage and checking who owns it, then rounds of edits nobody could trace. Most of the time went into the same steps, done by hand, every time.',
-    steps: [
-      { title: 'Script with a spine', text: 'Every script follows the same structure: the stakes, the big question, a turn, a rehook. In Darija, in caption-sized chunks.' },
-      { title: 'Shot list, beat by beat', text: 'Each line becomes a beat, and each beat is either real footage or a motion graphic, decided by written rules.' },
-      { title: 'Footage with receipts', text: 'Real footage of the named place, person or document, sourced with its licence logged. No generic stock.' },
-      { title: 'Looks on one board', text: 'Two or three looks per scene, all on one page. The client picks once instead of answering ten emails.' },
-      { title: 'Build, check, assemble', text: 'Scenes are built in the house style, checked against a checklist, then joined into the final cut.' },
-      { title: 'Final cut you can edit', text: 'Captions, speed and order can be changed per clip after the render, without starting over.' },
+// Ch. 05: the dailies. Real outputs of the two pipelines, copied from the export manifest.
+// Images are relative to assets/img/ (imgPath / thumbPath); video paths are full.
+export const DAILIES = {
+  films: [
+    {
+      id: 'kouma81',
+      titleAr: '«كوميرة» (20 يونيو 1981، الدار البيضاء)',
+      gloss: 'The word a minister used to mock those killed in Casablanca on 20 June 1981, and the casualty figures that never agree.',
+      runtime: '3:06', runtimeSec: 186, scenes: 22, language: 'Darija',
+      hookAr: 'الدار البيضاء، 20 يونيو 1981. القتلى سماهم إدريس البصري: «شهداء كوميرة» بسخرية. يعني: شهداء الخبز.',
+      hookEn: 'Casablanca, 20 June 1981. Idriss Basri called the dead "martyrs of komera", mockingly. Meaning: martyrs of bread.',
+      sources: ['Lakome2 (2016-09-05)', 'Assahifa', 'Yabiladi', 'USFP site', 'Al Jazeera encyclopedia'],
+      music: 'Infraction "Distant (Cinematic Documentary Drone style)", CC BY 3.0; Chris Zabriskie "The Dark Glow of the Mountains", CC BY 4.0',
+      loop: { mp4: 'assets/video/dailies/kouma81-loop.mp4', webm: 'assets/video/dailies/kouma81-loop.webm' },
+      hook: 'assets/video/dailies/kouma81-hook.mp4', hookSeconds: 20,
+      poster: 'dailies/kouma81-poster.webp',
+      frames: ['dailies/kouma81-f01.webp', 'dailies/kouma81-f02.webp', 'dailies/kouma81-f03.webp', 'dailies/kouma81-f04.webp', 'dailies/kouma81-f05.webp', 'dailies/kouma81-f06.webp'],
+    },
+    {
+      id: 'personality-p1',
+      titleAr: 'الشخصية فـ تلات طبقات (الجزء 1 / 2)',
+      gloss: 'Personality is built in three layers rather than born, drawn from one neuroscience article (part 1 of 2).',
+      runtime: '1:59', runtimeSec: 119, scenes: 14, language: 'Darija',
+      hookAr: 'الشخصية كتتبنى فـ تلات طبقات، ماشي كتتولد.',
+      hookEn: 'Personality is built in three layers, it is not born.',
+      sources: ['"The Neuroscience of Personality", ixcarus, Substack, 2 Aug 2026'],
+      music: 'MusicLFiles "Placid Ambient", CC BY 4.0',
+      loop: { mp4: 'assets/video/dailies/personality-p1-loop.mp4', webm: 'assets/video/dailies/personality-p1-loop.webm' },
+      hook: 'assets/video/dailies/personality-p1-hook.mp4', hookSeconds: 17.2,
+      poster: 'dailies/personality-p1-poster.webp',
+      frames: ['dailies/personality-p1-f01.webp', 'dailies/personality-p1-f02.webp', 'dailies/personality-p1-f03.webp', 'dailies/personality-p1-f04.webp', 'dailies/personality-p1-f05.webp', 'dailies/personality-p1-f06.webp'],
+    },
+    {
+      id: 'personality-p2',
+      titleAr: 'كيفاش كتثبت الشخصية وكيفاش كتبدل (الجزء 2 / 2)',
+      gloss: 'How personality holds steady and how it can still change, from the same article (part 2 of 2).',
+      runtime: '1:58', runtimeSec: 118, scenes: 14, language: 'Darija',
+      hookAr: '«أنا كسول» عند المخ توقع، ماشي وصف.',
+      hookEn: '"I am lazy" is a prediction to the brain, not a description.',
+      sources: ['"The Neuroscience of Personality", ixcarus, Substack, 2 Aug 2026'],
+      music: 'MusicLFiles "Painful Path to the Light", CC BY 4.0',
+      loop: { mp4: 'assets/video/dailies/personality-p2-loop.mp4', webm: 'assets/video/dailies/personality-p2-loop.webm' },
+      hook: 'assets/video/dailies/personality-p2-hook.mp4', hookSeconds: 20,
+      poster: 'dailies/personality-p2-poster.webp',
+      frames: ['dailies/personality-p2-f01.webp', 'dailies/personality-p2-f02.webp', 'dailies/personality-p2-f03.webp', 'dailies/personality-p2-f04.webp', 'dailies/personality-p2-f05.webp', 'dailies/personality-p2-f06.webp'],
+    },
+  ],
+  // wash: the reel's main colour, for its chip on the contact sheet
+  carousels: [
+    {
+      id: 'media-trained', reel: 'R1', reelName: 'Amber Reel', wash: '#fdc82f',
+      titleAr: 'واش باقي الميديا ترينينغ؟',
+      gloss: 'Is media training still worth it? The audience can now smell a script from far away.',
+      firstCaptionLine: 'واش باقي شي حد بغا يبان «media trained»؟ 🎙️',
+      gallery: ['dailies/media-trained-01.webp', 'dailies/media-trained-02.webp', 'dailies/media-trained-03.webp', 'dailies/media-trained-04.webp', 'dailies/media-trained-05.webp', 'dailies/media-trained-06.webp', 'dailies/media-trained-07.webp', 'dailies/media-trained-08.webp', 'dailies/media-trained-09.webp'],
+    },
+    {
+      id: 'story-ip', reel: 'R2', reelName: 'Road Reel', wash: '#1ca9e4',
+      titleAr: 'شكون مول الفكرة؟',
+      gloss: 'Who owns the idea? AI learns from your work, so who pays you for it?',
+      firstCaptionLine: 'الذكاء الاصطناعي كيتعلّم من خدمتك… وشكون اللي كيخلّصك؟ 🤔',
+      gallery: ['dailies/story-ip-01.webp', 'dailies/story-ip-02.webp', 'dailies/story-ip-03.webp', 'dailies/story-ip-04.webp', 'dailies/story-ip-05.webp', 'dailies/story-ip-06.webp', 'dailies/story-ip-07.webp', 'dailies/story-ip-08.webp', 'dailies/story-ip-09.webp'],
+    },
+    {
+      id: 'nobel-2026', reel: 'R3', reelName: 'Night Green', wash: '#8bdc58',
+      titleAr: 'كيف نُروّض الأزمات؟',
+      gloss: 'How do we tame crises? Central banks now model household spending and saving as part of the picture.',
+      firstCaptionLine: 'قرارك بالإنفاق أو الادخار صار جزءاً من نماذج البنوك المركزية.',
+      gallery: ['dailies/nobel-2026-01.webp', 'dailies/nobel-2026-02.webp', 'dailies/nobel-2026-03.webp', 'dailies/nobel-2026-04.webp', 'dailies/nobel-2026-05.webp', 'dailies/nobel-2026-06.webp', 'dailies/nobel-2026-07.webp', 'dailies/nobel-2026-08.webp', 'dailies/nobel-2026-09.webp'],
+    },
+    {
+      id: 'influencer', reel: 'R4', reelName: 'Magenta Reel', wash: '#e951c5',
+      titleAr: '7 قواعد باش ما تحرقش فلوسك مع المؤثرين',
+      gloss: 'Seven rules for not burning your money on influencers.',
+      firstCaptionLine: 'Influencer marketing ماشي لكل براند. هادي هي الحقيقة.',
+      gallery: ['dailies/influencer-01.webp', 'dailies/influencer-02.webp', 'dailies/influencer-03.webp', 'dailies/influencer-04.webp', 'dailies/influencer-05.webp', 'dailies/influencer-06.webp', 'dailies/influencer-07.webp', 'dailies/influencer-08.webp', 'dailies/influencer-09.webp'],
+    },
+    {
+      id: 'origin-economy', reel: 'R5', reelName: 'Alarm Open', wash: '#d71b19',
+      titleAr: '7 محطات غيّرت معنى كلمة «الاقتصاد»',
+      gloss: 'Seven stops that changed what the word "economy" means.',
+      firstCaptionLine: 'كانت كلمة «الاقتصاد» تعني شيئًا بسيطًا: إدارة البيت.',
+      gallery: ['dailies/origin-economy-01.webp', 'dailies/origin-economy-02.webp', 'dailies/origin-economy-03.webp', 'dailies/origin-economy-04.webp', 'dailies/origin-economy-05.webp', 'dailies/origin-economy-06.webp', 'dailies/origin-economy-07.webp', 'dailies/origin-economy-08.webp', 'dailies/origin-economy-09.webp'],
+    },
+  ],
+  board: {
+    looks: [
+      { id: 'intro-ss-a', series: 'Substack ديال اليوم', seriesKey: 'ss', title: 'Red-pen bars', image: 'dailies/board-ss-a.webp', picked: false },
+      { id: 'intro-ss-b', series: 'Substack ديال اليوم', seriesKey: 'ss', title: 'Rubber stamp', image: 'dailies/board-ss-b.webp', picked: false },
+      { id: 'intro-ss-c', series: 'Substack ديال اليوم', seriesKey: 'ss', title: 'Masthead', image: 'dailies/board-ss-c.webp', picked: true },
+      { id: 'intro-bk-a', series: 'كتاب الأسبوع', seriesKey: 'bk', title: 'Cover opens', image: 'dailies/board-bk-a.webp', picked: false },
+      { id: 'intro-bk-b', series: 'كتاب الأسبوع', seriesKey: 'bk', title: 'Gold foil', image: 'dailies/board-bk-b.webp', picked: false },
+      { id: 'intro-bk-c', series: 'كتاب الأسبوع', seriesKey: 'bk', title: 'Shelf of parts', image: 'dailies/board-bk-c.webp', picked: true },
+      { id: 'intro-fx-a', series: 'فهم فـ 60 ثانية', seriesKey: 'fx', title: '60-second ring', image: 'dailies/board-fx-a.webp', picked: false },
+      { id: 'intro-fx-b', series: 'فهم فـ 60 ثانية', seriesKey: 'fx', title: 'Wash slabs', image: 'dailies/board-fx-b.webp', picked: false },
+      { id: 'intro-fx-c', series: 'فهم فـ 60 ثانية', seriesKey: 'fx', title: 'Dictionary entry', image: 'dailies/board-fx-c.webp', picked: true },
     ],
-    agency: [
-      'Your brand rules become the written rules every video follows.',
-      'Your approval steps stay. They just move to one board.',
-      'Every pick is logged, so the next video starts closer to your taste.',
-    ],
+    approval: 'dailies/approval.webp',
   },
-  {
-    id: 'carousel', grade: 'jungle', device: 'slide', slate: 'Bay 2', kind: 'Carousel',
-    counter: { label: 'Slide', total: 9 },
-    notes: ['Mon · same template again', 'Tue · cover rewritten twice', 'Wed · "looks like last week"', 'Thu · typo found after export', 'Fri · "who picked this colour?"'],
-    headline: 'Carousels that never look like last week\'s post.', accent: 'last',
-    observed: 'I watched carousels get made from zero every time, or copied from the last one until the feed looked the same. Decisions were made for the client instead of with them, and fixes came after the export.',
-    steps: [
-      { title: 'Read the source', text: 'An article, a link or a script. The story is pulled out before anything is designed.' },
-      { title: 'Variants, not guesses', text: 'Two or three options for each decision: format, cover headline, slide outline, colour story, caption.' },
-      { title: 'One click to approve', text: 'The client approves each block on one page. Nothing is built before that.' },
-      { title: 'A new colour story each post', text: 'A rotating colour queue means two posts in a row never share a palette.' },
-      { title: 'Build only what was approved', text: 'Slides are built from a fixed design system, then checked frame by frame.' },
-      { title: 'Ready to post', text: 'A LinkedIn-ready PDF, the caption and the hashtags. Nothing else to chase.' },
-    ],
-    agency: [
-      'Your design system replaces mine. Same pipeline, your look.',
-      'Formats match your client\'s channels and languages.',
-      'Your team approves, the pipeline does the repetitive part.',
-    ],
-  },
-];
+  totals: { films: 3, runtime: '7:03', runtimeSec: 423, slides: 45, colourStories: 5 },
+};
 
-export const WORKFLOWS_CLOSE = { text: 'Have a workflow that eats your week? Show me how it runs.', button: 'Map my workflow' };
+export const DAILIES_CLOSE = { text: 'Want one of these pipelines running on your brand rules? I set it up with your team.', button: 'Map my workflow' };
+
+// each carousel also opens in the work lightbox, shaped like a project
+export const DAILY_PROJECTS = DAILIES.carousels.map((c) => ({
+  id: c.id, title: c.reelName, tag: `Carousel ${c.reel} · ${c.gallery.length} slides`, year: '',
+  blurb: c.gloss, role: [`${c.reel} colour story`, 'Approved block by block', 'Fixed design system'], gallery: c.gallery,
+}));

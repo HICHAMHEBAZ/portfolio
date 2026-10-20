@@ -1,4 +1,4 @@
-import { PROJECTS, SERVICES, PROCESS, FAQ, PROFILE, WRITING, NOISE_SIGNAL, imgPath, thumbPath } from './data.js';
+import { PROJECTS, SERVICES, PROCESS, FAQ, PROFILE, WRITING, NOISE_SIGNAL, WHATSAPP_TEXT, imgPath, thumbPath } from './data.js';
 
 export const $ = (sel, root = document) => root.querySelector(sel);
 
@@ -41,7 +41,18 @@ function renderProfile() {
     // a profile without a link yet is hidden rather than left as a dead "#"
     else if (a.dataset.link in PROFILE) a.closest('li')?.remove();
   });
+  renderWhatsApp();
   $('#year').textContent = new Date().getFullYear();
+}
+
+export const whatsappUrl = (text = WHATSAPP_TEXT) => `https://wa.me/${PROFILE.whatsapp}?text=${encodeURIComponent(text)}`;
+
+// the WhatsApp button and inline link only appear once PROFILE.whatsapp has a number
+function renderWhatsApp() {
+  if (!/^\d{8,15}$/.test(PROFILE.whatsapp || '')) return;
+  document.querySelectorAll('#cta-wa, [data-wa]').forEach((a) => { a.href = whatsappUrl(); });
+  $('#cta-chat').hidden = false;
+  $('#cta-wa-inline').hidden = false;
 }
 
 function renderCredits() {
@@ -138,7 +149,7 @@ function renderServices() {
   ])));
 }
 
-// Ch. 06: each subject is a cassette on the shelf; the reels turn with the scroll
+// Ch. 09: each subject is a cassette on the shelf; the reels turn with the scroll
 const reel = () => el('span', { class: 'tape__reel' }, [el('i')]);
 
 function renderWriting() {

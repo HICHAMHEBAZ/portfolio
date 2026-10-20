@@ -1,0 +1,31 @@
+/* ---------- conversion: WhatsApp, confirmation panel, sticky CTA ---------- */
+
+/* WhatsApp: acid green from the film palette, ink text, cream fill on hover */
+.btn--wa { background: var(--film-acid); color: var(--ink); border-color: var(--ink); }
+.btn--wa::before { background: var(--paper); }
+.btn--wa:hover { color: var(--ink); }
+.btn--wa:focus-visible, .sent__edit:focus-visible, .sent__address:focus-visible { outline: 2px solid var(--hot); outline-offset: 3px; }
+.cta__chat { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1.2rem; margin: 1.8rem 0 0; color: var(--fg-dim); font-size: .92rem; }
+.cta__chat[hidden], #cta-wa-inline[hidden] { display: none; }
+
+/* after submit the form gives way to this panel, inside the same ink slab */
+.path.is-sent > :not(.sent) { display: none; }
+.sent { display: grid; gap: .9rem; justify-items: start; animation: sent-in var(--t-base) var(--ease) both; }
+.sent__title { margin: 0; font: 800 var(--text-h3)/1.04 var(--font-display); letter-spacing: -.015em; outline: none; }
+.sent__text { margin: 0; max-width: 46ch; color: var(--fg-dim); }
+.path .sent__address {
+  width: min(100%, 26rem); padding: .8rem 1rem; border: 1px dashed var(--hot); border-radius: var(--radius);
+  background: rgb(255 243 226 / .06); color: var(--fg); font: 600 1rem var(--font-body); letter-spacing: .01em;
+}
+.sent__actions { display: flex; flex-wrap: wrap; gap: .6rem; }
+.sent__edit { padding: .3rem 0; border: 0; background: none; color: var(--fg-dim); font: 400 .88rem var(--font-body); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; transition: color var(--t-quick); }
+.sent__edit:hover { color: var(--hot); }
+@keyframes sent-in { from { opacity: 0; transform: translateY(14px); } }
+
+/* the floating button would cover the forms, so it leaves while #cta is on screen */
+.sticky-cta.is-away { transform: translateY(150%); pointer-events: none; }
+
+@media (max-width: 760px) {
+  .sent__actions .btn { flex: 1 1 100%; justify-content: center; }
+  .cta__chat .btn { width: 100%; justify-content: center; }
+}

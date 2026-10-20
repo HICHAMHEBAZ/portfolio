@@ -76,8 +76,8 @@
 
 /* ---------- CH 05: THE OFFER ---------- */
 .offer-ch { padding: var(--section) var(--gutter) calc(var(--section) + var(--land-room)); overflow: hidden; }
-.services { position: relative; max-width: var(--max); margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--rule); }
-.service { display: flex; flex-direction: column; gap: 1rem; padding: 2rem 1.6rem 2rem 0; margin-right: 1.6rem; border-right: 1px solid var(--rule); transition: transform var(--t-base) var(--ease); }
+.services { position: relative; max-width: var(--max); margin: 0 auto; display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1px solid var(--rule); }
+.service { display: flex; flex-direction: column; gap: 1rem; padding: 2rem 1.2rem 2rem 0; margin-right: 1.2rem; border-right: 1px solid var(--rule); transition: transform var(--t-base) var(--ease); }
 .service:last-child { border-right: 0; margin-right: 0; }
 .service__num { font: 900 3.2rem/1 var(--font-display); color: var(--hot); }
 .service h3 { font: 800 var(--text-h3)/1.04 var(--font-display); letter-spacing: -.015em; }
@@ -174,10 +174,21 @@
 .credits a { text-decoration: none; transition: color var(--t-quick); }
 .credits a:hover { color: var(--film-amber); }
 
+/* five cards: one row of five when wide, then 3 + 2, then 2 + 2 + 1, then a stack */
+@media (max-width: 1359px) {
+  .services { grid-template-columns: repeat(6, 1fr); }
+  .service { grid-column: span 2; }
+  .service:nth-child(n + 4) { grid-column: span 3; }
+  .service:nth-child(3), .service:nth-child(5) { border-right: 0; margin-right: 0; }
+  .service:nth-child(n + 4) { border-top: 1px solid var(--rule); }
+}
 @media (max-width: 1100px) {
   .services { grid-template-columns: repeat(2, 1fr); }
-  .service:nth-child(2) { border-right: 0; margin-right: 0; }
+  .service, .service:nth-child(n + 4) { grid-column: auto; }
+  .service:nth-child(3) { border-right: 1px solid var(--rule); margin-right: 1.2rem; }
+  .service:nth-child(2n) { border-right: 0; margin-right: 0; }
   .service:nth-child(n + 3) { border-top: 1px solid var(--rule); }
+  .service:nth-child(5) { grid-column: 1 / -1; border-right: 0; margin-right: 0; }
   .steps { grid-template-columns: repeat(3, 1fr); }
   .paths { grid-template-columns: 1fr; }
 }
@@ -189,6 +200,7 @@
   .road::before, .road__convoy { display: none; }
   .steps, .services { grid-template-columns: 1fr; }
   .step, .service { border-right: 0; margin-right: 0; border-bottom: 1px solid var(--rule); padding-bottom: 1.6rem; }
+  .service:nth-child(n) { border-right: 0; margin-right: 0; border-top: 0; }
   .step { opacity: 1; }
   .form__row { grid-template-columns: 1fr; }
   .credits { padding-bottom: 6rem; }

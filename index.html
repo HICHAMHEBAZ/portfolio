@@ -6,6 +6,15 @@
   <title>Hicham Hebaz | Marketing strategist & social media designer</title>
   <meta name="description" content="Marketing strategist and social media designer in Rabat. Campaigns, posts and ads in Darija, French and English that people stop for.">
   <meta name="theme-color" content="#fdc82f">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Hicham Hebaz | Marketing strategist & social media designer">
+  <meta property="og:description" content="Campaigns, posts and ads in Darija, French and English that people stop for. Based in Rabat.">
+  <meta property="og:image" content="assets/img/tafilalt-ksar.webp">
+  <meta property="og:image:alt" content="Tafilalt campaign: a ksar in the desert">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Hicham Hebaz | Marketing strategist & social media designer">
+  <meta name="twitter:description" content="Campaigns, posts and ads in Darija, French and English that people stop for. Based in Rabat.">
+  <meta name="twitter:image" content="assets/img/tafilalt-ksar.webp">
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +28,10 @@
   <link rel="modulepreload" href="js/ambient.js">
   <link rel="modulepreload" href="js/ambient-art.js">
   <link rel="modulepreload" href="js/film-props.js">
-  <link rel="modulepreload" href="js/workflows.js">
+  <link rel="modulepreload" href="js/dailies.js">
+  <link rel="modulepreload" href="js/dailies-gate.js">
+  <link rel="modulepreload" href="js/dailies-motion.js">
+  <link rel="modulepreload" href="js/dailies-sheet.js">
   <link rel="modulepreload" href="js/carousel.js">
   <link rel="modulepreload" href="js/ui.js">
   <link rel="modulepreload" href="js/motion.js">
@@ -30,7 +42,9 @@
   <link rel="stylesheet" href="css/scenery.css">
   <link rel="stylesheet" href="css/hero.css">
   <link rel="stylesheet" href="css/chapters.css">
-  <link rel="stylesheet" href="css/workflows.css">
+  <link rel="stylesheet" href="css/conversion.css">
+  <link rel="stylesheet" href="css/dailies.css">
+  <link rel="stylesheet" href="css/dailies-sheet.css">
   <link rel="stylesheet" href="css/work.css">
   <link rel="stylesheet" href="css/seams.css">
   <link rel="stylesheet" href="css/notes.css">
@@ -83,10 +97,10 @@
       <ul class="nav__links" id="nav-links">
         <li><a href="#proof">The work</a></li>
         <li><a href="#method">Method</a></li>
-        <li><a href="#workflows">Making-of</a></li>
-        <li><a href="#writing">Writing</a></li>
+        <li><a href="#dailies">Dailies</a></li>
         <li><a href="#offer">Services</a></li>
         <li><a href="#faq">FAQ</a></li>
+        <li><a href="#writing">Writing</a></li>
         <li class="nav__cta-mobile"><a href="#cta">Start a project</a></li>
       </ul>
     </nav>
@@ -237,50 +251,47 @@
       </div>
     </section>
 
-    <div class="seam" data-seam="bay" aria-hidden="true"></div>
+    <div class="seam" data-seam="lights" aria-hidden="true"></div>
 
-    <!-- CH 05: THE MAKING-OF (a 3D tracking shot down the road, rendered by js/workflows.js + js/making-of/) -->
-    <section class="flows" id="workflows" data-grade="road" data-chapter="05|The making-of" aria-labelledby="flows-title">
-      <header class="chapter-head flows__head">
-        <p class="slate"><span>Ch. 05</span> The making-of</p>
-        <h2 class="h-display" id="flows-title" data-accent="machine." data-split>I watch how the work is done. Then I build the machine.</h2>
-        <p class="lede">Behind the scenes of two content workflows. I sat with each task first, timed every step and wrote down where the hours went. Then I turned the repeatable parts into a pipeline. Scroll, and follow the caravan down the road.</p>
+    <!-- CH 05: THE DAILIES (a screening room: film strip through a projector gate, a board of prints, a contact sheet; js/dailies*.js) -->
+    <section class="dly" id="dailies" data-grade="indigo" data-chapter="05|The dailies" aria-labelledby="dailies-title">
+      <header class="chapter-head dly__head">
+        <p class="slate"><span>Ch. 05</span> The dailies</p>
+        <h2 class="h-display" id="dailies-title" data-accent="shipped." data-split>What the two pipelines shipped.</h2>
+        <p class="lede">In film, the dailies are the takes screened at the end of each day. These are mine: three explainers in Darija and five carousels, made with the two pipelines I built, shown as they came out.</p>
+        <dl class="tally" id="dly-tally"></dl>
       </header>
+
+      <!-- Reel A: the gate -->
+      <div class="gate-scene" id="dly-gate" aria-label="Three explainer videos, screened one after another"></div>
+
+      <!-- interlude: one page, one pick -->
+      <div class="board" id="dly-board"></div>
+
+      <!-- Reel B: the contact sheet -->
+      <div class="sheet-scene" id="dly-sheet"></div>
+
+      <div class="dly__close" id="dly-close"></div>
     </section>
 
-    <div class="seam" data-seam="night" aria-hidden="true"></div>
+    <div class="seam" data-seam="daybreak" aria-hidden="true"></div>
 
-    <!-- CH 06: THE NOTES (what I write) -->
-    <section class="notes" id="writing" data-grade="indigo" data-chapter="06|The notes" aria-labelledby="notes-title">
-      <div class="amb amb--tent" data-amb="tentNight" aria-hidden="true"></div>
-      <header class="chapter-head notes__head">
-        <p class="slate"><span>Ch. 06</span> The notes</p>
-        <h2 class="h-display" id="notes-title" data-accent="write" data-split>What I write when I'm not designing.</h2>
-        <p class="lede">On LinkedIn I write about marketing in Morocco: the language people buy in, how a story carries a campaign, and the media we all scroll through.</p>
-      </header>
-      <ul class="tapes" id="tapes"></ul>
-      <div class="notes__foot">
-        <a class="btn btn--solid" data-link="linkedin" href="https://www.linkedin.com/in/hicham-hebaz/" target="_blank" rel="noopener" data-nod>Follow on LinkedIn <svg><use href="#i-arrow"/></svg></a>
-        <span class="notes__meta">New notes most weeks · Darija, French, English</span>
-      </div>
-    </section>
-
-    <!-- CH 07: THE OFFER -->
-    <section class="offer-ch" id="offer" data-grade="amber" data-chapter="07|The offer" aria-labelledby="offer-title">
+    <!-- CH 06: THE OFFER -->
+    <section class="offer-ch" id="offer" data-grade="amber" data-chapter="06|The offer" aria-labelledby="offer-title">
       <div class="amb amb--noon" data-amb="noon" aria-hidden="true"></div>
       <header class="chapter-head">
-        <p class="slate"><span>Ch. 07</span> The offer</p>
-        <h2 class="h-display" id="offer-title" data-accent="Four" data-split>Four ways to work together.</h2>
+        <p class="slate"><span>Ch. 06</span> The offer</p>
+        <h2 class="h-display" id="offer-title" data-accent="Five" data-split>Five ways to work together.</h2>
         <p class="lede">Pick one, or let me take the whole thing from research to the last post.</p>
       </header>
       <ol class="services" id="services-grid"></ol>
     </section>
 
-    <!-- CH 08: BEFORE YOU ASK -->
-    <section class="faq" id="faq" data-grade="amber" data-chapter="08|Before you ask" aria-labelledby="faq-title">
+    <!-- CH 07: BEFORE YOU ASK -->
+    <section class="faq" id="faq" data-grade="amber" data-chapter="07|Before you ask" aria-labelledby="faq-title">
       <div class="amb amb--rest" data-amb="rest" aria-hidden="true"></div>
       <header class="chapter-head">
-        <p class="slate"><span>Ch. 08</span> Before you ask</p>
+        <p class="slate"><span>Ch. 07</span> Before you ask</p>
         <h2 class="h-display" id="faq-title" data-accent="ask." data-split>Questions people ask.</h2>
       </header>
       <div class="faq__list" id="faq-list"></div>
@@ -288,14 +299,14 @@
 
     <div class="seam" data-seam="dawn" aria-hidden="true"></div>
 
-    <!-- CH 09: YOUR STORY NEXT -->
-    <section class="cta" id="cta" data-grade="eclipse" data-chapter="09|Your story next" aria-labelledby="cta-title">
+    <!-- CH 08: YOUR STORY NEXT -->
+    <section class="cta" id="cta" data-grade="eclipse" data-chapter="08|Your story next" aria-labelledby="cta-title">
       <div class="cta__sky" aria-hidden="true"><span class="cta__sun"><i class="cta__disc"></i></span><span class="dust d1"></span><span class="dust d2"></span></div>
       <div class="amb amb--flock" data-amb="finale" aria-hidden="true"></div>
       <div class="cta__ridges" data-el="ridges" aria-hidden="true"></div>
       <div class="cta__inner">
         <header class="cta__head">
-          <p class="slate"><span>Ch. 09</span> Your story next</p>
+          <p class="slate"><span>Ch. 08</span> Your story next</p>
           <h2 class="h-display" id="cta-title" data-accent="next." data-split>Your brand's story is next.</h2>
           <p class="lede">Two ways in. Pick the one that fits where you are.</p>
         </header>
@@ -327,13 +338,33 @@
               <label><input type="radio" name="type" value="Campaign creative"><span>Campaign</span></label>
               <label><input type="radio" name="type" value="Marketing strategy"><span>Strategy</span></label>
               <label><input type="radio" name="type" value="Ads"><span>Ads</span></label>
+              <label><input type="radio" name="type" value="Content pipeline"><span>Pipeline</span></label>
             </fieldset>
             <label>About the project<textarea name="message" rows="3" required maxlength="2000" placeholder="What you sell, who to, and when you need it."></textarea></label>
             <p class="form__error" id="form-error" role="alert"></p>
             <button class="btn btn--solid" type="submit" data-nod>Send the brief <svg><use href="#i-arrow"/></svg></button>
           </form>
         </div>
-        <p class="cta__direct">Or write directly: <a href="mailto:hello@yourdomain.com" data-profile="email">hello@yourdomain.com</a> · Rabat, Morocco · remote OK</p>
+        <p class="cta__chat" id="cta-chat" hidden>
+          <a class="btn btn--wa" id="cta-wa" href="#" target="_blank" rel="noopener" data-nod>Message on WhatsApp <svg><use href="#i-arrow"/></svg></a>
+          <span>Quickest way to reach me. Replies the same day.</span>
+        </p>
+        <p class="cta__direct">Or write directly: <a href="mailto:hello@yourdomain.com" data-profile="email">hello@yourdomain.com</a><span id="cta-wa-inline" hidden> · <a data-wa href="#" target="_blank" rel="noopener">WhatsApp</a></span> · Rabat, Morocco · remote OK</p>
+      </div>
+    </section>
+
+    <!-- CH 09: AFTER THE CREDITS (the notes, what I write) -->
+    <section class="notes" id="writing" data-grade="indigo" data-chapter="09|After the credits" aria-labelledby="notes-title">
+      <div class="amb amb--tent" data-amb="tentNight" aria-hidden="true"></div>
+      <header class="chapter-head notes__head">
+        <p class="slate"><span>Ch. 09</span> After the credits</p>
+        <h2 class="h-display" id="notes-title" data-accent="write" data-split>What I write when I'm not designing.</h2>
+        <p class="lede">On LinkedIn I write about marketing in Morocco: the language people buy in, how a story carries a campaign, and the media we all scroll through.</p>
+      </header>
+      <ul class="tapes" id="tapes"></ul>
+      <div class="notes__foot">
+        <a class="btn btn--solid" data-link="linkedin" href="https://www.linkedin.com/in/hicham-hebaz/" target="_blank" rel="noopener" data-nod>Follow on LinkedIn <svg><use href="#i-arrow"/></svg></a>
+        <span class="notes__meta">New notes most weeks · Darija, French, English</span>
       </div>
     </section>
   </main>

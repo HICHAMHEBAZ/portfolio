@@ -1,0 +1,115 @@
+/* ---------- CH 05, interlude and Reel B: the board and the contact sheet ----------
+   The board is a dark table under one lamp, prints dropped on it and circled in grease pencil
+   (amber on the dark). The contact sheet is cream paper on a cool light table: rows develop
+   from negative, a red pencil line runs down the margin, a loupe magnifies the frame under a
+   mouse. Pencil strokes are SVG paths of length 1 drawn by stroke-dashoffset (js/dailies-pencil.js). */
+
+.pencil { position: absolute; overflow: visible; pointer-events: none; }
+.pencil path { fill: none; stroke: var(--pencil, var(--hot)); stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
+
+/* ---------- the board ---------- */
+.board { max-width: calc(var(--max) + 2 * var(--gutter)); margin: clamp(6rem, 11vw, 10rem) auto 0; padding: 0 var(--gutter); display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.5fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+.board__line { margin: 0; font: 800 var(--text-h3)/1.1 var(--font-display); letter-spacing: -.015em; text-wrap: balance; }
+.approval { margin: 2.6rem 0 0 1.2rem; max-width: 15rem; rotate: -3deg; filter: drop-shadow(8px 10px 0 rgb(0 0 0 / .45)); }
+/* a torn-off fragment: the page's fixed send bar sits below the crop */
+.approval__page { overflow: hidden; aspect-ratio: 1200 / 1330; background: var(--paper); clip-path: polygon(0 0, 100% 0, 100% 95%, 93% 98.5%, 85% 95.5%, 76% 99%, 66% 96%, 57% 99.5%, 47% 96.5%, 37% 99%, 27% 95.5%, 17% 98.5%, 8% 96%, 0 99%); }
+.approval__page img { width: 100%; height: auto; }
+.approval figcaption { margin-top: .9rem; font-size: .82rem; line-height: 1.45; color: var(--fg-dim); }
+
+.table {
+  position: relative; display: grid; gap: clamp(1.6rem, 3vw, 2.4rem); padding: clamp(1.2rem, 3vw, 2.2rem); border-radius: 10px;
+  background: radial-gradient(ellipse 70% 52% at 42% 26%, rgb(253 186 44 / .2), transparent 70%), repeating-linear-gradient(92deg, #1a1530 0 3px, #161128 3px 10px), #130e26;
+  box-shadow: inset 0 0 0 1px rgb(255 243 226 / .08), inset 0 0 90px rgb(0 0 0 / .6), 0 30px 60px rgb(0 0 0 / .4);
+}
+.prow { position: relative; padding-top: 1.7rem; }
+/* each series is labelled with a strip of masking tape */
+.prow__label { position: absolute; left: .2rem; top: 0; z-index: 1; padding: .22rem .8rem; rotate: -1.5deg; background: rgb(255 243 226 / .9); color: var(--land-near); font: 700 .8rem/1.4 var(--font-body); box-shadow: 0 2px 4px rgb(0 0 0 / .4); clip-path: polygon(0 0, 100% 0, 98% 50%, 100% 100%, 0 100%, 2% 50%); }
+.prow__prints { display: grid; grid-template-columns: repeat(3, minmax(0, 8.4rem)) minmax(0, 1fr); gap: clamp(.8rem, 1.6vw, 1.3rem); align-items: start; }
+.print { position: relative; rotate: var(--r, 0deg); padding: 5px; background: var(--paper); box-shadow: 0 10px 22px rgb(0 0 0 / .5), 0 2px 4px rgb(0 0 0 / .4); transition: rotate var(--t-base) var(--ease), translate var(--t-base) var(--ease); }
+.print img { width: 100%; height: auto; aspect-ratio: 320 / 569; object-fit: cover; }
+.print:hover { rotate: 0deg; translate: 0 -5px; z-index: 2; }
+/* the pick: a loop around the print, and the look's name written beside it */
+.print__pencil { inset: -9% -17% -7% -15%; width: 132%; height: 116%; z-index: 1; }
+.print__note { position: absolute; left: calc(100% + 1.5rem); top: 36%; display: flex; flex-direction: column; align-items: flex-start; gap: .1rem; width: max-content; max-width: 8rem; rotate: -4deg; font: italic 800 clamp(1.1rem, .9rem + .7vw, 1.5rem)/1.05 var(--font-display); color: var(--hot); }
+.note__arrow { position: relative; width: 42px; height: 20px; rotate: 180deg; scale: 1 -1; margin-left: -.2rem; }
+.note__arrow path { stroke-width: 2.4; }
+
+/* ---------- Reel B: the contact sheet ---------- */
+.sheet-scene { max-width: calc(var(--max) + 2 * var(--gutter)); margin: clamp(6rem, 12vw, 11rem) auto 0; padding: 0 var(--gutter); }
+.sheet-head { margin-bottom: 2.2rem; max-width: 40rem; }
+.sheet-head__line { margin: 0; font: 800 var(--text-h3)/1.1 var(--font-display); letter-spacing: -.015em; text-wrap: balance; }
+.lighttable {
+  position: relative; padding: clamp(.7rem, 1.5vw, 1.3rem); border-radius: 14px;
+  background: linear-gradient(160deg, #e3edff, #bdd3f8);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .55), 0 0 70px 8px rgb(150 190 255 / .5), 0 0 210px 40px rgb(120 160 255 / .22);
+}
+.sheet { --pencil: var(--film-alarm); position: relative; padding: clamp(1rem, 2.4vw, 2rem); background: var(--paper); color: #1d142c; border-radius: 3px; box-shadow: 0 1px 0 rgb(0 0 0 / .18), 0 6px 18px rgb(29 20 44 / .22); }
+.sheet::before { content: ''; position: absolute; inset: 0; background: url(../assets/img/grain.png) repeat; mix-blend-mode: overlay; opacity: .55; pointer-events: none; }
+.sheet__rows { position: relative; display: grid; gap: clamp(1.1rem, 2vw, 1.7rem); }
+.row { display: grid; grid-template-columns: minmax(11rem, 15rem) minmax(0, 1fr); gap: clamp(1rem, 2vw, 1.8rem); align-items: start; padding-bottom: 1.1rem; border-bottom: 1px dashed rgb(29 20 44 / .22); }
+.row:last-child { border-bottom: 0; padding-bottom: 0; }
+.row__margin { display: grid; gap: .35rem; }
+.row__margin > p { margin: 0; padding-left: calc(1.5rem + .65rem); }
+.row__label { display: flex; align-items: center; gap: .65rem; padding: 0; border: 0; background: none; text-align: left; font: italic 800 1.18rem/1.1 var(--font-display); color: inherit; }
+.row__label:hover b, .row__label:focus-visible b { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.row__label:focus-visible { outline: 2px solid var(--pencil); outline-offset: 4px; }
+/* the colour chip: a dab of that reel's main wash, like a swatch stuck to the sheet */
+.chip { flex: none; width: 1.5rem; height: 1.5rem; border-radius: 50%; background: var(--wash); border: 2px solid #1d142c; box-shadow: 2px 2px 0 rgb(29 20 44 / .3); }
+.row__ar { font: 700 .98rem/1.5 var(--font-body); }
+.row__gloss { font-size: .78rem; line-height: 1.45; color: rgb(29 20 44 / .72); }
+.row__frames { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 7px; padding-bottom: 1rem; }
+/* a frame on the sheet: dark film border, a printed frame number under it */
+.thumb { position: relative; aspect-ratio: 4 / 5; padding: 3px; border: 0; background: #0d0820; cursor: zoom-in; }
+.thumb::after { content: attr(data-n); position: absolute; left: 0; right: 0; top: 100%; padding-top: 3px; text-align: center; font: 600 .5rem/1 var(--font-body); letter-spacing: .1em; color: rgb(29 20 44 / .55); }
+.thumb img { width: 100%; height: 100%; object-fit: cover; transition: filter 900ms var(--ease-ambient); transition-delay: calc(var(--i) * 60ms); }
+.thumb:focus-visible { outline: 2px solid var(--pencil); outline-offset: 2px; }
+/* develop on enter: a negative until its row arrives, then each frame comes up in the tray */
+.sheet.is-negative .row:not(.is-developed) .thumb img { filter: invert(1) grayscale(1) contrast(.8) blur(1px); }
+.row.is-developing .thumb img { will-change: filter; }
+.thumb__ring { inset: -13% -15%; width: 130%; height: 126%; z-index: 1; }
+.thumb__ring path { stroke-width: 2.4; }
+
+/* the margin line runs through the five chips; the note is written under it */
+.sheet__pencil { left: 0; top: 0; width: 100%; height: 100%; z-index: 2; }
+.sheet__pencil path { stroke-width: 3.4; }
+.sheet__note { position: relative; margin: 1.2rem 0 0; padding-left: .2rem; width: max-content; rotate: -2deg; font: italic 800 clamp(1.15rem, 1rem + .6vw, 1.5rem)/1 var(--font-display); color: var(--pencil); }
+
+/* the loupe: a thick dark ring, inner shadow and a handle; follows a mouse only */
+.loupe { position: fixed; left: 0; top: 0; z-index: 120; width: 0; height: 0; pointer-events: none; opacity: 0; transition: opacity .15s; }
+.loupe.is-on { opacity: 1; }
+.loupe__lens { position: absolute; left: -90px; top: -90px; width: 180px; height: 180px; border-radius: 50%; border: 7px solid #1d142c; background: #1d142c no-repeat; box-shadow: inset 0 0 22px rgb(0 0 0 / .5), 0 14px 30px rgb(0 0 0 / .45); }
+.loupe__lens::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 30% 24%, rgb(255 255 255 / .34), transparent 38%); }
+.loupe__handle { position: absolute; left: -8px; top: 0; width: 16px; height: 96px; border-radius: 8px; background: #1d142c; transform-origin: 50% 0; transform: rotate(-45deg) translateY(76px); }
+@media (pointer: coarse) { .loupe { display: none; } }
+
+/* ---------- tablets and phones ---------- */
+@media (max-width: 1100px) {
+  .board { grid-template-columns: 1fr; }
+  .approval { margin-left: 0; }
+}
+@media (max-width: 960px) {
+  .row { grid-template-columns: 1fr; gap: .8rem; }
+  .row__margin > p { padding-left: 0; }
+  .row__ar, .row__gloss { padding-left: calc(1.5rem + .65rem); }
+}
+@media (max-width: 760px) {
+  .board, .sheet-scene { padding-inline: 16px; }
+  .table { padding: 1rem .8rem 1.4rem; }
+  .prow__prints { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; }
+  .print { padding: 3px; }
+  .print__pencil { inset: -6% -10% -4% -10%; width: 120%; height: 110%; }
+  .prow { padding-bottom: 1.7rem; }
+  .print__note { top: 100%; left: .2rem; margin-top: .7rem; max-width: none; rotate: -3deg; font-size: 1rem; }
+  .note__arrow { display: none; }
+  .sheet { padding: 1rem .8rem; }
+  /* each row is a strip you swipe; the whole row develops at once */
+  .row__frames { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; gap: 8px; margin-inline: -.2rem; padding: .3rem .2rem 1.2rem; }
+  .row__frames::-webkit-scrollbar { display: none; }
+  .thumb { flex: none; width: 34vw; scroll-snap-align: start; }
+  .thumb img { transition-delay: 0s; }
+  .thumb__ring, .sheet__pencil { display: none; }
+  .row__label { font-size: 1.1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .thumb img { transition: none; }
+}
